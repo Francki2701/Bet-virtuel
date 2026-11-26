@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>VIRTUEL V20 - COMME V12</title>
+<title>VIRTUEL V21 - COMME V12</title>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 *{box-sizing:border-box}
@@ -20,7 +20,6 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 .verif b{font-size:15px}
 .btn-oui{width:48%;background:#00c853;color:#fff;padding:14px;border:0;border-radius:12px;font-weight:900;font-size:16px;margin-top:10px}
 .btn-non{width:48%;background:#ff1744;color:#fff;padding:14px;border:0;border-radius:12px;font-weight:900;font-size:16px;margin-top:10px}
-/* ⭐ STYLE V12 EXACTEMENT COMME TA CAPTURE */
 .ticket{background:#001a0a;border:2px solid #00ff88;border-radius:16px;padding:14px;margin-top:12px;display:none}
 .ticket h3{margin:0 0 10px;color:#00ff88;font-size:16px}
 .ticket-row{background:#111;border-radius:12px;padding:12px;margin-bottom:8px}
@@ -45,8 +44,8 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 </head>
 <body>
 <div class="top">
-<h1>⚡ VIRTUEL V20 CAPTURE BAM</h1>
-<p>CAPTURE → BAM → RÉSULTAT - TU NE TAPES RIEN</p>
+<h1>⚡ VIRTUEL V21 CAPTURE BAM</h1>
+<p>CAPTURE → BAM → RÉSULTAT COMME V12</p>
 </div>
 <div class="card">
 <label>📸 TA CAPTURE BET261 - C'EST TOUT</label>
@@ -60,7 +59,6 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 <button class="btn-oui" onclick="confirmerOui()">✅ OUI</button>
 <button class="btn-non" onclick="confirmerNon()">❌ NON</button>
 </div>
-<!-- ⭐ RÉSULTAT COMME V12, EXACTEMENT COMME TA CAPTURE -->
 <div class="ticket" id="ticketBox">
 <h3>🎫 TON TICKET - TOP 3 BAM</h3>
 <div id="ticketList"></div>
@@ -80,15 +78,15 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 <button class="btn-effacer" onclick="effacerJournal()">🗑️ Effacer</button>
 <p class="small" id="listeTrades" style="margin-top:10px;text-align:left">Aucun pari.</p>
 </div>
-<p class="small">V20 = Lecture V19 sans serveur (pas de bug 0 noms) + Résultat V12 comme tu aimes.<br>18+ Joue responsable.</p>
+<p class="small">V21 = On ne casse plus les chiffres verts. Lecture douce + 2 moteurs.<br>Si le 1er rate, le 2ème essaie. Résultat comme V12.<br>18+ Joue responsable.</p>
 <script>
 let derniereImageData=null, dernierTicketText="", miseDefaut=5000, dernierTableau=null, tableauEnAttente=null;
-let trades=JSON.parse(localStorage.getItem('virtuel_v20_trades')||"[]");
+let trades=JSON.parse(localStorage.getItem('virtuel_v21_trades')||"[]");
 function changerMise(){ let v=parseInt(document.getElementById('miseInput').value); if(v&&v>0){ miseDefaut=v; if(dernierTableau) genererTicketBamm(dernierTableau); } }
 function majJournal(){let t=trades.length;let w=trades.filter(x=>x.res==="WIN").length;let wr=t?Math.round(w/t*100):0;document.getElementById('totalTrades').innerText=t;document.getElementById('winRate').innerText=wr+"%";document.getElementById('listeTrades').innerHTML=t?trades.slice(-5).reverse().map(x=>`${x.pari} - ${x.res}`).join("<br>"):"Aucun pari.";}
 majJournal();
-function validerResultat(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}let res=document.getElementById('resultat').value;trades.push({pari:dernierTicketText,res:res});localStorage.setItem('virtuel_v20_trades',JSON.stringify(trades));majJournal();alert("Validé : "+res);}
-function effacerJournal(){if(confirm("Effacer ?")){trades=[];localStorage.removeItem('virtuel_v20_trades');majJournal();}}
+function validerResultat(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}let res=document.getElementById('resultat').value;trades.push({pari:dernierTicketText,res:res});localStorage.setItem('virtuel_v21_trades',JSON.stringify(trades));majJournal();alert("Validé : "+res);}
+function effacerJournal(){if(confirm("Effacer ?")){trades=[];localStorage.removeItem('virtuel_v21_trades');majJournal();}}
 function copierTicket(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}navigator.clipboard.writeText(dernierTicketText).then(()=>alert("Copié !\n"+dernierTicketText));}
 function onFileChange(e){
   let f=e.target.files[0]; if(!f) return;
@@ -97,21 +95,20 @@ function onFileChange(e){
   document.getElementById('ticketBox').style.display='none';
   document.getElementById('verifBox').style.display='none';
   document.getElementById('btnCopy').style.display='none';
-  document.getElementById('autoText').innerText='⚡ BAM... Je lis dans ton téléphone...';
+  document.getElementById('autoText').innerText='⚡ BAM... Je lis...';
   let r=new FileReader();
   r.onload=function(ev){ derniereImageData=ev.target.result; let p=document.getElementById('preview'); p.src=ev.target.result; p.style.display='block'; lireEtBamm(ev.target.result); };
   r.readAsDataURL(f);
 }
 function relireCapture(){ if(!derniereImageData){alert("Mets d'abord ta capture !");return;} lireEtBamm(derniereImageData); }
-function preparerImage(imgData){
+// ⭐ V21 : On NE met PLUS en noir et blanc dur. On agrandit juste x3, on garde les couleurs vertes.
+function agrandirDoux(imgData){
   return new Promise((resolve)=>{
     let img=new Image();
     img.onload=function(){
-      let canvas=document.createElement('canvas'); let scale=2.5; canvas.width=img.width*scale; canvas.height=img.height*scale;
-      let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height);
-      let d=ctx.getImageData(0,0,canvas.width,canvas.height); let px=d.data;
-      for(let i=0;i<px.length;i+=4){ let g=(px[i]+px[i+1]+px[i+2])/3; let v=g>140?255:0; px[i]=v; px[i+1]=v; px[i+2]=v; }
-      ctx.putImageData(d,0,0); resolve(canvas.toDataURL('image/png'));
+      let canvas=document.createElement('canvas'); let scale=3; canvas.width=img.width*scale; canvas.height=img.height*scale;
+      let ctx=canvas.getContext('2d'); ctx.imageSmoothingEnabled=true; ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      resolve(canvas.toDataURL('image/jpeg',0.95));
     };
     img.src=imgData;
   });
@@ -122,46 +119,67 @@ function corrigerNom(nomBrut){
   for(let d of dico){ if(b.includes(d[0])) return d[1]; }
   return null;
 }
-function corrigerTexteTesseract(t){
-  return t.replace(/Fulharn|Fulhamn|Futham/gi,"Fulham").replace(/Liverpoo[li]/gi,"Liverpool").replace(/Everlon/gi,"Everton").replace(/Spur$/gim,"Spurs").replace(/N\. Forest/gi,"N. Forest").replace(/Brentfard/gi,"Brentford").replace(/Bournemout/gi,"Bournemouth").replace(/Manchestar/gi,"Manchester");
+function extraireTableau(texteBrut){
+  let texte=texteBrut.replace(/,/g,".").replace(/l(?=\.\d)/gi,"1").replace(/O(?=\.\d)/g,"0").replace(/S(?=\.\d)/g,"5");
+  // Cotes : on cherche aussi les formes "1 45" ou "1 45" que Tesseract rate parfois
+  let cotes=(texte.match(/\d\.\d{2}/g)||[]).map(n=>parseFloat(n)).filter(v=>v>=1.01 && v<=20);
+  let bas=texte.toLowerCase();
+  let dicoNoms=["manchester red","manchester blue","london reds","london blues","liverpool","spurs","tottenham","wolverhampton","wolves","everton","west ham","aston villa","a. villa","leeds","bournemouth","burnley","sunderland","brighton","crystal palace","c. palace","fulham","newcastle","nottingham","n. forest","brentford","chelsea","arsenal","man red","man blue"];
+  let positions=[]; dicoNoms.forEach(nom=>{ let start=0; while(true){ let idx=bas.indexOf(nom,start); if(idx===-1) break; positions.push({pos:idx,nom:corrigerNom(nom)}); start=idx+1; } });
+  positions.sort((a,b)=>a.pos-b.pos);
+  let noms=[]; positions.forEach(p=>{ if(!noms.some(n=>Math.abs(n.pos-p.pos)<6)) noms.push(p); });
+  let tableau=[];
+  let nbMatchs=Math.min(Math.floor(noms.length/2), Math.floor(cotes.length/3));
+  for(let i=0;i<nbMatchs;i++){
+    let dom=noms[i*2].nom, ext=noms[i*2+1].nom;
+    if(dom===ext) continue;
+    tableau.push({nom:dom+" vs "+ext,c1:cotes[i*3],cX:cotes[i*3+1],c2:cotes[i*3+2]});
+  }
+  return {tableau,texte,noms,cotes};
 }
 async function lireEtBamm(imgData){
   try{
-    let prep=await preparerImage(imgData);
+    let grand=await agrandirDoux(imgData);
+    let texte1="", tableau1=[];
+    // ESSAI 1 : OCR.space - il lit très bien les chiffres verts
+    try{
+      document.getElementById('autoText').innerText='⚡ Essai 1 : lecture serveur...';
+      let form=new FormData(); form.append("base64Image", grand); form.append("language","eng"); form.append("scale","true"); form.append("OCREngine","2");
+      let resp=await fetch("https://api.ocr.space/parse/image",{method:"POST",headers:{"apikey":"helloworld"},body:form});
+      let data=await resp.json();
+      texte1=data && data.ParsedResults && data.ParsedResults[0] ? data.ParsedResults[0].ParsedText||"" : "";
+    }catch(e){ texte1=""; }
+    let r1=extraireTableau(texte1);
+    if(r1.tableau.length>=1 && r1.cotes.length>=3){
+      document.getElementById('texteLu').style.display='block';
+      document.getElementById('texteLu').innerText="Texte lu (serveur) : "+r1.texte;
+      tableauEnAttente=r1.tableau;
+      document.getElementById('verifBox').style.display='block';
+      document.getElementById('verifListe').innerHTML=r1.tableau.map(t=>`• ${t.nom} - ${t.c1} / ${t.cX} / ${t.c2}`).join("<br>");
+      document.getElementById('autoText').innerText=`👀 J'ai lu ${r1.tableau.length} matchs. Vérifie, clique OUI ou NON.`;
+      return;
+    }
+    // ESSAI 2 : Tesseract dans le téléphone, SANS filtre noir et blanc dur
+    document.getElementById('autoText').innerText='⚡ Essai 1 a raté (0 cotes), j\'essaie dans ton téléphone...';
     let worker=await Tesseract.createWorker("eng");
     await worker.setParameters({tessedit_pageseg_mode:"6"});
-    let ret=await worker.recognize(prep);
+    let ret=await worker.recognize(grand);
     await worker.terminate();
-    let texteBrut=corrigerTexteTesseract(ret.data.text||"");
-    let texte=texteBrut.replace(/,/g,".").replace(/O(?=\.\d)/g,"0");
+    let r2=extraireTableau(ret.data.text||"");
     document.getElementById('texteLu').style.display='block';
-    document.getElementById('texteLu').innerText="Texte lu : "+texte;
-    let cotes=(texte.match(/\d\.\d{2}/g)||[]).map(n=>parseFloat(n)).filter(v=>v>=1.01 && v<=20);
-    let bas=texte.toLowerCase();
-    let dicoNoms=["manchester red","manchester blue","london reds","london blues","liverpool","spurs","tottenham","wolverhampton","wolves","everton","west ham","aston villa","a. villa","leeds","bournemouth","burnley","sunderland","brighton","crystal palace","c. palace","fulham","newcastle","nottingham","n. forest","brentford","chelsea","arsenal","man red","man blue"];
-    let positions=[]; dicoNoms.forEach(nom=>{ let start=0; while(true){ let idx=bas.indexOf(nom,start); if(idx===-1) break; positions.push({pos:idx,nom:corrigerNom(nom)}); start=idx+1; } });
-    positions.sort((a,b)=>a.pos-b.pos);
-    let noms=[]; positions.forEach(p=>{ if(!noms.some(n=>Math.abs(n.pos-p.pos)<6)) noms.push(p); });
-    let tableau=[];
-    let nbMatchs=Math.min(Math.floor(noms.length/2), Math.floor(cotes.length/3));
-    for(let i=0;i<nbMatchs;i++){
-      let dom=noms[i*2].nom, ext=noms[i*2+1].nom;
-      if(dom===ext) continue;
-      tableau.push({nom:dom+" vs "+ext,c1:cotes[i*3],cX:cotes[i*3+1],c2:cotes[i*3+2]});
-    }
-    if(tableau.length>=1){
-      tableauEnAttente=tableau;
+    document.getElementById('texteLu').innerText="Texte lu (téléphone) : "+r2.texte;
+    if(r2.tableau.length>=1){
+      tableauEnAttente=r2.tableau;
       document.getElementById('verifBox').style.display='block';
-      document.getElementById('verifListe').innerHTML=tableau.map(t=>`• ${t.nom} - ${t.c1} / ${t.cX} / ${t.c2}`).join("<br>");
-      document.getElementById('autoText').innerText=`👀 J'ai lu ${tableau.length} matchs. Vérifie, clique OUI ou NON.`;
+      document.getElementById('verifListe').innerHTML=r2.tableau.map(t=>`• ${t.nom} - ${t.c1} / ${t.cX} / ${t.c2}`).join("<br>");
+      document.getElementById('autoText').innerText=`👀 J'ai lu ${r2.tableau.length} matchs. Vérifie, clique OUI ou NON.`;
     } else {
-      document.getElementById('autoText').innerText=`⚠️ J'ai lu ${noms.length} noms (${noms.map(n=>n.nom).join(", ")}) et ${cotes.length} cotes. Coupe plus serré et réessaie.`;
+      document.getElementById('autoText').innerText=`⚠️ J'ai lu ${r2.noms.length} noms (${r2.noms.map(n=>n.nom).join(", ")}) et ${r2.cotes.length} cotes. Coupe ta capture JUSTE sur les lignes vertes, sans le haut "1X2 Mi-tps" et sans le bas "Menu", et renvoie. C'est le haut et le bas qui le perturbent.`;
     }
-  }catch(e){ document.getElementById('autoText').innerText='⚠️ Erreur de lecture. Vérifie ta connexion 1ère fois, puis réessaie.'; }
+  }catch(e){ document.getElementById('autoText').innerText='⚠️ Erreur de lecture. Vérifie ta 4G et réessaie.'; }
 }
 function confirmerOui(){ if(!tableauEnAttente) return; document.getElementById('verifBox').style.display='none'; genererTicketBamm(tableauEnAttente); }
 function confirmerNon(){ document.getElementById('verifBox').style.display='none'; document.getElementById('autoText').innerText='❌ Ok, je me suis trompé. Coupe plus serré et renvoie.'; tableauEnAttente=null; }
-// ⭐ AFFICHAGE COMME V12 - EXACTEMENT COMME TA CAPTURE
 function genererTicketBamm(tableau){
   dernierTableau=tableau;
   let analyses=[];
@@ -189,7 +207,6 @@ function genererTicketBamm(tableau){
   let chanceCombinee=1; top3.forEach(a=>chanceCombinee*=(a.probaChoix/100)); chanceCombinee=Math.round(chanceCombinee*100);
   document.getElementById('ticketBox').style.display='block';
   document.getElementById('btnCopy').style.display='block';
-  // ⭐ ICI C'EST LE STYLE V12 DE TA CAPTURE
   document.getElementById('ticketList').innerHTML=top3.map((a,i)=>`<div class="ticket-row"><b>${i+1}. ${a.nom}</b><br><span class="proba">Proba 1:${a.p1}% X:${a.pX}% 2:${a.p2}% - ${a.c1} / ${a.cX} / ${a.c2}</span><br><span class="victoire">${a.choix} @ ${a.coteChoix}</span><br><span class="risque">⚠️ ${a.avertissement}</span></div>`).join("") + (pieges.length?`<div class="ticket-row" style="border:1px solid #ff1744"><b>🚫 PIÈGES :</b><br>${pieges.map(p=>`${p.nom} @ ${p.coteFav}`).join("<br>")}</div>`:"");
   document.getElementById('coteTotale').innerText="x "+coteTotale;
   document.getElementById('gainPotentiel').innerText=`Mise ${miseDefaut} MGA → Gain ${gain} MGA`;
@@ -197,7 +214,7 @@ function genererTicketBamm(tableau){
   document.getElementById('ticketDetail').innerHTML=`<b>📊 Confiance = vraie proba.</b><br>${top3.map(a=>`• ${a.nom} : ${a.confiance}% - Risque ${a.risque}%`).join("<br>")}`;
   document.getElementById('tousMatchs').innerHTML=`<b>✅ Tous les matchs avec NOMS :</b><br>${analyses.map(a=>`${a.type==="PIEGE"?"🚫":a.confiance>=55?"🟢":"🟡"} ${a.nom} - ${a.choix}`).join("<br>")}`;
   document.getElementById('autoText').innerHTML=`✅ <b>BAM ! Ticket prêt comme V12.</b> Cote x${coteTotale} - Chance ${chanceCombinee}%`;
-  dernierTicketText=`TICKET V20 - Cote x${coteTotale} - Gain ${gain} MGA - Chance ${chanceCombinee}%\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix}`).join("\n")}`;
+  dernierTicketText=`TICKET V21 - Cote x${coteTotale} - Gain ${gain} MGA - Chance ${chanceCombinee}%\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix}`).join("\n")}`;
   if(navigator.vibrate) navigator.vibrate([100,50,100]);
   document.getElementById('ticketBox').scrollIntoView({behavior:'smooth',block:'start'});
 }
