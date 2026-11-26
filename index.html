@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>V18 - 3 MATCHS - LECTURE BET261</title>
+<title>V19 - 3 MATCHS - SANS SERVEUR</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#000;color:#fff;font-family:Arial;padding:0;padding-bottom:20px}
@@ -44,8 +45,8 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 </head>
 <body>
 <div class="top">
-<h1>⚡ VIRTUEL V18 - 3 MATCHS</h1>
-<p>LECTURE BET261 : NOMS EMPILÉS - ON NE DIT PLUS "GAGNE"</p>
+<h1>⚡ VIRTUEL V19 - 3 MATCHS</h1>
+<p>SANS SERVEUR - LECTURE DANS TON TÉLÉPHONE - ÇA NE BEUG PLUS</p>
 </div>
 <div class="card">
 <label>📸 TA CAPTURE BET261 - 3 MATCHS OU PLUS</label>
@@ -78,15 +79,15 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 <button class="btn-effacer" onclick="effacerJournal()">🗑️ Effacer</button>
 <p class="small" id="listeTrades" style="margin-top:10px;text-align:left">Aucun pari.</p>
 </div>
-<p class="small">V18 = Lecture pour Bet261 : 1 équipe en haut, 1 équipe en bas, cotes au milieu.<br>On ne dit plus "GAGNE". On dit "Plus de chances" + risque.<br>18+ Joue responsable.</p>
+<p class="small">V19 = Plus de serveur ocr.space. Lecture directe dans ton téléphone.<br>La 1ère fois, ça met 5-10 secondes à charger, après c'est rapide.<br>18+ Joue responsable.</p>
 <script>
 let derniereImageData=null, dernierTicketText="", miseDefaut=5000, dernierTableau=null, tableauEnAttente=null;
-let trades=JSON.parse(localStorage.getItem('virtuel_v18_trades')||"[]");
+let trades=JSON.parse(localStorage.getItem('virtuel_v19_trades')||"[]");
 function changerMise(){ let v=parseInt(document.getElementById('miseInput').value); if(v&&v>0){ miseDefaut=v; if(dernierTableau) genererTicketBamm(dernierTableau); } }
 function majJournal(){let t=trades.length;let w=trades.filter(x=>x.res==="WIN").length;let wr=t?Math.round(w/t*100):0;document.getElementById('totalTrades').innerText=t;document.getElementById('winRate').innerText=wr+"%";document.getElementById('listeTrades').innerHTML=t?trades.slice(-5).reverse().map(x=>`${x.pari} - ${x.res}`).join("<br>"):"Aucun pari.";}
 majJournal();
-function validerResultat(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}let res=document.getElementById('resultat').value;trades.push({pari:dernierTicketText,res:res});localStorage.setItem('virtuel_v18_trades',JSON.stringify(trades));majJournal();alert("Validé : "+res);}
-function effacerJournal(){if(confirm("Effacer ?")){trades=[];localStorage.removeItem('virtuel_v18_trades');majJournal();}}
+function validerResultat(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}let res=document.getElementById('resultat').value;trades.push({pari:dernierTicketText,res:res});localStorage.setItem('virtuel_v19_trades',JSON.stringify(trades));majJournal();alert("Validé : "+res);}
+function effacerJournal(){if(confirm("Effacer ?")){trades=[];localStorage.removeItem('virtuel_v19_trades');majJournal();}}
 function copierTicket(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}navigator.clipboard.writeText(dernierTicketText).then(()=>alert("Copié !\n"+dernierTicketText));}
 function onFileChange(e){
   let f=e.target.files[0]; if(!f) return;
@@ -95,16 +96,23 @@ function onFileChange(e){
   document.getElementById('ticketBox').style.display='none';
   document.getElementById('verifBox').style.display='none';
   document.getElementById('btnCopy').style.display='none';
-  document.getElementById('autoText').innerText='⚡ Je lis... Noms en haut / en bas + cotes...';
+  document.getElementById('autoText').innerText='⚡ Je lis dans ton téléphone... 5-10 sec la 1ère fois...';
   let r=new FileReader();
   r.onload=function(ev){ derniereImageData=ev.target.result; let p=document.getElementById('preview'); p.src=ev.target.result; p.style.display='block'; lireEtBamm(ev.target.result); };
   r.readAsDataURL(f);
 }
 function relireCapture(){ if(!derniereImageData){alert("Mets d'abord ta capture !");return;} lireEtBamm(derniereImageData); }
-function agrandirImage(imgData){
+// On agrandit + on met en noir et blanc pour que Tesseract lise mieux les chiffres verts
+function preparerImage(imgData){
   return new Promise((resolve)=>{
     let img=new Image();
-    img.onload=function(){ let canvas=document.createElement('canvas'); let scale=2; canvas.width=img.width*scale; canvas.height=img.height*scale; let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height); resolve(canvas.toDataURL('image/jpeg',0.9)); };
+    img.onload=function(){
+      let canvas=document.createElement('canvas'); let scale=2.5; canvas.width=img.width*scale; canvas.height=img.height*scale;
+      let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      let d=ctx.getImageData(0,0,canvas.width,canvas.height); let px=d.data;
+      for(let i=0;i<px.length;i+=4){ let g=(px[i]+px[i+1]+px[i+2])/3; let v=g>140?255:0; px[i]=v; px[i+1]=v; px[i+2]=v; }
+      ctx.putImageData(d,0,0); resolve(canvas.toDataURL('image/png'));
+    };
     img.src=imgData;
   });
 }
@@ -114,48 +122,30 @@ function corrigerNom(nomBrut){
   for(let d of dico){ if(b.includes(d[0])) return d[1]; }
   return null;
 }
+// On corrige les fautes de lecture de Tesseract : "Fulharn" -> "Fulham", "1,33" -> "1.33", "O" -> "0" dans les cotes
+function corrigerTexteTesseract(t){
+  return t.replace(/Fulharn|Fulhamn|Futham/gi,"Fulham").replace(/Liverpoo[li]/gi,"Liverpool").replace(/Everlon/gi,"Everton").replace(/Spur$/gim,"Spurs").replace(/N\. Forest/gi,"N. Forest").replace(/Brentfard/gi,"Brentford").replace(/Bournemout/gi,"Bournemouth").replace(/Manchestar/gi,"Manchester");
+}
 async function lireEtBamm(imgData){
   try{
-    let grand=await agrandirImage(imgData);
-    let form=new FormData(); form.append("base64Image", grand); form.append("language","eng"); form.append("isOverlayRequired","true"); form.append("scale","true"); form.append("OCREngine","2");
-    let resp=await fetch("https://api.ocr.space/parse/image",{method:"POST",headers:{"apikey":"helloworld"},body:form});
-    let data=await resp.json();
-    let parsed=data && data.ParsedResults && data.ParsedResults[0] ? data.ParsedResults[0] : null;
-    let texte=parsed? parsed.ParsedText||"" : "";
-    let lignesOverlay=parsed && parsed.TextOverlay && parsed.TextOverlay.Lines ? parsed.TextOverlay.Lines : [];
-    // ⭐ V18 : On ne cherche PLUS 2 équipes sur la même ligne. On prend TOUT, dans l'ordre de haut en bas.
-    // 1. On récupère tous les mots avec leur position Y
-    let motsAvecY=[];
-    lignesOverlay.forEach(l=>{ l.Words.forEach(w=>{ motsAvecY.push({mot:w.WordText, y:l.MinTop||0, x:w.MinLeft||0}); }); });
-    // Si overlay vide, on retombe sur le texte brut
-    if(motsAvecY.length===0){
-      let lignesTexte=texte.split("\n").filter(s=>s.trim());
-      lignesTexte.forEach((t,i)=>{ motsAvecY.push({mot:t, y:i*30, x:0}); });
-    }
-    motsAvecY.sort((a,b)=>a.y-b.y);
-    // 2. On reconstruit le texte dans l'ordre de haut en bas
-    let texteOrdonne=motsAvecY.map(m=>m.mot).join(" ");
+    let prep=await preparerImage(imgData);
+    // ⭐ V19 : Tesseract lit DANS ton téléphone, pas sur un serveur. Plus de "0 noms" à cause du serveur.
+    let worker=await Tesseract.createWorker("eng");
+    await worker.setParameters({tessedit_pageseg_mode:"6"});
+    let ret=await worker.recognize(prep);
+    await worker.terminate();
+    let texteBrut=corrigerTexteTesseract(ret.data.text||"");
+    let texte=texteBrut.replace(/,/g,".").replace(/O(?=\.\d)/g,"0");
     document.getElementById('texteLu').style.display='block';
-    document.getElementById('texteLu').innerText="Texte lu dans l'ordre : "+texteOrdonne;
-    // 3. On extrait les COTES dans l'ordre de haut en bas (elles sont à droite, mais leur Y donne l'ordre)
-    // On prend les cotes depuis le texte ordonné, mais pour être sûr on les prend aussi depuis le texte brut et on les trie par apparition
-    let cotesBrutes=texteOrdonne.match(/\d[.,]\d{2}/g)||[];
-    let cotes=cotesBrutes.map(n=>parseFloat(n.replace(',','.'))).filter(v=>v>=1.01 && v<=20);
-    // On enlève les doublons consécutifs (ex: 7,13 qui apparaît 2 fois dans 2 matchs, on le garde, mais pas 2 fois d'affilée à cause de l'overlay)
-    let cotesPropres=[]; cotes.forEach(v=>{ if(!cotesPropres.length || Math.abs(v-cotesPropres[cotesPropres.length-1])>0.001 || cotesPropres.length%3!==0) cotesPropres.push(v); });
-    // En fait, pour les cotes, on utilise la méthode simple : toutes les cotes du texte brut dans l'ordre
-    let cotes2=(texte.match(/\d[.,]\d{2}/g)||[]).map(n=>parseFloat(n.replace(',','.'))).filter(v=>v>=1.01 && v<=20);
-    // On choisit la liste la plus longue qui est multiple de 3
-    if(cotes2.length>=cotes.length && cotes2.length%3===0) cotes=cotes2;
-    // 4. On extrait les NOMS dans l'ordre de haut en bas, depuis le texte ordonné
-    let bas=texteOrdonne.toLowerCase();
+    document.getElementById('texteLu').innerText="Texte lu : "+texte;
+    // Cotes : tous les nombres X.XX
+    let cotes=(texte.match(/\d\.\d{2}/g)||[]).map(n=>parseFloat(n)).filter(v=>v>=1.01 && v<=20);
+    // Noms : on cherche les équipes dans l'ordre où elles apparaissent
+    let bas=texte.toLowerCase();
     let dicoNoms=["manchester red","manchester blue","london reds","london blues","liverpool","spurs","tottenham","wolverhampton","wolves","everton","west ham","aston villa","a. villa","leeds","bournemouth","burnley","sunderland","brighton","crystal palace","c. palace","fulham","newcastle","nottingham","n. forest","brentford","chelsea","arsenal","man red","man blue"];
-    let positions=[]; dicoNoms.forEach(nom=>{ let start=0; while(true){ let idx=bas.indexOf(nom,start); if(idx===-1) break; positions.push({pos:idx,nom:corrigerNom(nom),long:nom.length}); start=idx+1; } });
+    let positions=[]; dicoNoms.forEach(nom=>{ let start=0; while(true){ let idx=bas.indexOf(nom,start); if(idx===-1) break; positions.push({pos:idx,nom:corrigerNom(nom)}); start=idx+1; } });
     positions.sort((a,b)=>a.pos-b.pos);
-    // On enlève les doublons qui se chevauchent (ex: "man red" dans "manchester red", "a. villa" dans "aston villa")
-    let noms=[];
-    positions.forEach(p=>{ let chevauche=noms.some(n=>Math.abs(n.pos-p.pos)<6); if(!chevauche) noms.push(p); });
-    // 5. On fait les matchs : Nom 1 + Nom 2 = Match 1, Cotes 1-2-3 = Match 1
+    let noms=[]; positions.forEach(p=>{ if(!noms.some(n=>Math.abs(n.pos-p.pos)<6)) noms.push(p); });
     let tableau=[];
     let nbMatchs=Math.min(Math.floor(noms.length/2), Math.floor(cotes.length/3));
     for(let i=0;i<nbMatchs;i++){
@@ -169,9 +159,9 @@ async function lireEtBamm(imgData){
       document.getElementById('verifListe').innerHTML=tableau.map(t=>`• ${t.nom} - ${t.c1} / ${t.cX} / ${t.c2}`).join("<br>");
       document.getElementById('autoText').innerText=`👀 J'ai lu ${tableau.length} matchs. Vérifie si les noms sont bons, clique OUI ou NON.`;
     } else {
-      document.getElementById('autoText').innerText=`⚠️ J'ai lu ${noms.length} noms et ${cotes.length} cotes. Reprends ta capture plus serrée, juste les lignes vertes. Noms lus : ${noms.map(n=>n.nom).join(", ")}`;
+      document.getElementById('autoText').innerText=`⚠️ J'ai lu ${noms.length} noms (${noms.map(n=>n.nom).join(", ")}) et ${cotes.length} cotes (${cotes.join(", ")}). Si c'est faux, coupe plus serré, juste les lignes vertes, et réessaie.`;
     }
-  }catch(e){ document.getElementById('autoText').innerText='⚠️ Pas de connexion. Vérifie ta 4G.'; }
+  }catch(e){ document.getElementById('autoText').innerText='⚠️ Erreur de lecture. Vérifie ta connexion pour charger Tesseract la 1ère fois, puis réessaie. Erreur : '+e.message; }
 }
 function confirmerOui(){ if(!tableauEnAttente) return; document.getElementById('verifBox').style.display='none'; genererTicketBamm(tableauEnAttente); }
 function confirmerNon(){ document.getElementById('verifBox').style.display='none'; document.getElementById('autoText').innerText='❌ Ok, je me suis trompé. Coupe ta capture plus serrée, juste les lignes vertes, et renvoie.'; tableauEnAttente=null; }
@@ -209,7 +199,7 @@ function genererTicketBamm(tableau){
   document.getElementById('ticketDetail').innerHTML=`<b>📊 Honnête :</b><br>${top3.map(a=>`• ${a.nom} : ${a.nomFav} a ${a.probaChoix}% - Risque ${100-a.probaChoix}%`).join("<br>")}`;
   document.getElementById('tousMatchs').innerHTML=`<b>✅ Tous les matchs avec NOMS :</b><br>${analyses.map(a=>`${a.type==="PIEGE"?"🚫":a.confiance>=55?"🟢":"🟡"} ${a.nom} - ${a.choix} - Chance ${a.probaChoix}% - Risque ${100-a.probaChoix}%`).join("<br>")}`;
   document.getElementById('autoText').innerHTML=`✅ <b>Ticket 3 matchs prêt, avec les risques.</b> Cote x${coteTotale} - Chance ${chanceCombinee}%`;
-  dernierTicketText=`TICKET V18 - 3 MATCHS - Cote x${coteTotale} - Gain ${gain} MGA - Chance ${chanceCombinee}% - Risque ${100-chanceCombinee}%\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix} - Chance ${a.probaChoix}% - Risque ${100-a.probaChoix}%`).join("\n")}`;
+  dernierTicketText=`TICKET V19 - 3 MATCHS - Cote x${coteTotale} - Gain ${gain} MGA - Chance ${chanceCombinee}% - Risque ${100-chanceCombinee}%\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix} - Chance ${a.probaChoix}% - Risque ${100-a.probaChoix}%`).join("\n")}`;
   if(navigator.vibrate) navigator.vibrate([100,50,100]);
   document.getElementById('ticketBox').scrollIntoView({behavior:'smooth',block:'start'});
 }
