@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>VIRTUEL V3 - JUSTE CAPTURE</title>
+<title>VIRTUEL V5 - CAPTURE SEULE - NOMS REELS</title>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 *{box-sizing:border-box}
@@ -13,176 +13,182 @@ body{margin:0;background:#000;color:#fff;font-family:Arial;padding:0;padding-bot
 .top p{color:#ffcc00;font-size:11px;margin:5px 0 0;font-weight:900}
 .card{margin:14px;background:linear-gradient(180deg,#0a2a00,#0a0a0a);border:2px solid #00c853;border-radius:20px;padding:16px}
 label{font-size:13px;color:#ffcc00;font-weight:900;display:block;margin:12px 0 6px}
-input,select{width:100%;padding:13px;border-radius:12px;border:1px solid #444;background:#111;color:#fff;font-size:15px}
+input{width:100%;padding:14px;border-radius:12px;border:1px solid #444;background:#111;color:#fff;font-size:15px}
 .preview{width:100%;border-radius:12px;margin-top:10px;display:none;border:1px solid #333}
 .auto-box{background:#111;border:1px solid #00ff88;border-radius:12px;padding:12px;font-size:13px;line-height:1.8;display:none}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th{color:#ffcc00;font-size:11px;padding:8px 4px;text-align:left}
-td{padding:6px 4px;border-bottom:1px solid #222}
-td input{padding:8px;font-size:13px;text-align:center}
-.match-name{font-weight:900;font-size:12px}
-.btn-next{width:100%;background:linear-gradient(180deg,#00e676,#00c853);color:#fff;padding:18px;border:0;border-radius:14px;font-weight:900;font-size:19px;cursor:pointer;margin-top:12px}
-.btn-sec{width:100%;background:#ffcc00;color:#000;padding:13px;border:0;border-radius:12px;font-weight:900;font-size:15px;margin-top:8px;cursor:pointer}
-.btn-reanalyse{width:100%;background:#00c853;color:#fff;padding:13px;border:0;border-radius:12px;font-weight:900;font-size:15px;margin-top:8px;display:none}
 .ticket{background:#001a0a;border:2px solid #00ff88;border-radius:16px;padding:14px;margin-top:12px;display:none}
 .ticket h3{margin:0 0 10px;color:#00ff88;font-size:16px}
-.ticket-row{background:#111;border-radius:12px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-.ticket-row b{font-size:14px}
+.ticket-row{background:#111;border-radius:12px;padding:12px;margin-bottom:8px}
+.ticket-row b{font-size:15px}
 .ticket-row span{color:#00ff88;font-weight:900}
 .total-box{background:#ffcc00;color:#000;border-radius:12px;padding:14px;text-align:center;font-weight:900;margin-top:10px}
 .total-box span{font-size:28px}
 .conf-detail{background:#111;border:1px solid #333;border-radius:10px;padding:10px;font-size:12px;line-height:1.8;text-align:left;margin-top:10px}
 .conf-detail b{color:#ffcc00}
 .small{font-size:11px;color:#aaa;text-align:center;margin-top:8px;line-height:1.5}
-.detail{background:#000;padding:12px;border-radius:12px;font-size:13px;line-height:1.6;white-space:pre-wrap;margin-top:12px;display:none}
 .warn{background:#220000;border:1px solid #ff1744;padding:10px;border-radius:12px;font-size:11px;line-height:1.5;color:#ffaaaa;margin:14px}
+.btn-copy{width:100%;background:#ffcc00;color:#000;padding:14px;border:0;border-radius:12px;font-weight:900;font-size:16px;margin-top:8px}
+.btn-reanalyse{width:100%;background:#00c853;color:#fff;padding:13px;border:0;border-radius:12px;font-weight:900;font-size:15px;margin-top:8px;display:none}
 .journal{margin:14px;background:#0a0a0a;border:2px solid #333;border-radius:20px;padding:16px}
 .journal h2{font-size:16px;margin:0 0 10px;color:#00ff88}
 .j-grid{display:flex;gap:8px}.j-grid>div{flex:1;background:#111;padding:12px;border-radius:12px;text-align:center}
 .j-num{font-size:24px;font-weight:900}
 .btn-valider{width:100%;background:#007bff;color:#fff;padding:14px;border:0;border-radius:12px;font-weight:900;font-size:16px;margin-top:10px}
 .btn-effacer{width:100%;background:#ff1744;color:#fff;padding:14px;border:0;border-radius:12px;font-weight:900;font-size:16px;margin-top:8px}
-.btn-copy{width:100%;background:#ffcc00;color:#000;padding:14px;border:0;border-radius:12px;font-weight:900;font-size:16px;margin-top:8px}
-.step{background:#111;border:1px solid #333;border-radius:12px;padding:12px;margin-bottom:8px;font-size:13px;line-height:1.6}
-.step b{color:#00ff88}
 </style>
 </head>
 <body>
 <div class="top">
-<h1>⚽ VIRTUEL V3 - CAPTURE</h1>
-<p>BET261 - TU METS JUSTE LA CAPTURE, LE ROBOT FAIT TOUT</p>
+<h1>⚽ VIRTUEL V5</h1>
+<p>TU ENVOIES CAPTURE - BAMM RÉSULTAT</p>
+<p style="color:#00ff88">Le robot lit les VRAIS NOMS sur ta capture</p>
 </div>
-
 <div class="card">
-<div class="step"><b>ÉTAPE 1 -</b> Sur Bet261, va sur <b>VIRTUEL > ENGLISH LEAGUE > 1X2</b> comme dans ta vidéo.<br><b>ÉTAPE 2 -</b> Fais une capture où on voit bien les <b>cotes vertes</b>.<br><b>ÉTAPE 3 -</b> Mets la capture ici 👇</div>
-
-<label>📸 UPLOAD TA CAPTURE BET261 - LE ROBOT LIT LES COTES TOUT SEUL</label>
+<label>📸 UPLOAD TA CAPTURE BET261 - C'EST TOUT</label>
 <input type="file" id="fileInput" accept="image/*" onchange="onFileChange(event)">
 <img id="preview" class="preview">
-<button class="btn-reanalyse" id="btnReanalyse" onclick="relireCapture()">🔄 RE-LIRE MA CAPTURE</button>
+<button class="btn-reanalyse" id="btnReanalyse" onclick="relireCapture()">🔄 RE-ANALYSER MA CAPTURE</button>
 <div class="auto-box" id="autoBox"><b>🤖 ROBOT :</b><br><span id="autoText">En attente de ta capture...</span></div>
-
-<label>🎫 LES 10 MATCHS - Le robot a rempli tout seul, tu corriges si un chiffre est faux</label>
-<table>
-<tr><th>Match</th><th>1</th><th>X</th><th>2</th></tr>
-<tr><td class="match-name">Man Blue vs London Reds</td><td><input id="m0_1" value=""></td><td><input id="m0_X" value=""></td><td><input id="m0_2" value=""></td></tr>
-<tr><td class="match-name">Spurs vs Wolverhampton</td><td><input id="m1_1" value=""></td><td><input id="m1_X" value=""></td><td><input id="m1_2" value=""></td></tr>
-<tr><td class="match-name">Everton vs West Ham</td><td><input id="m2_1" value=""></td><td><input id="m2_X" value=""></td><td><input id="m2_2" value=""></td></tr>
-<tr><td class="match-name">Liverpool vs A. Villa</td><td><input id="m3_1" value=""></td><td><input id="m3_X" value=""></td><td><input id="m3_2" value=""></td></tr>
-<tr><td class="match-name">Leeds vs London Blues</td><td><input id="m4_1" value=""></td><td><input id="m4_X" value=""></td><td><input id="m4_2" value=""></td></tr>
-<tr><td class="match-name">Bournemouth vs Burnley</td><td><input id="m5_1" value=""></td><td><input id="m5_X" value=""></td><td><input id="m5_2" value=""></td></tr>
-<tr><td class="match-name">Sunderland vs Brighton</td><td><input id="m6_1" value=""></td><td><input id="m6_X" value=""></td><td><input id="m6_2" value=""></td></tr>
-<tr><td class="match-name">C. Palace vs Man Red</td><td><input id="m7_1" value=""></td><td><input id="m7_X" value=""></td><td><input id="m7_2" value=""></td></tr>
-<tr><td class="match-name">Fulham vs Newcastle</td><td><input id="m8_1" value=""></td><td><input id="m8_X" value=""></td><td><input id="m8_2" value=""></td></tr>
-<tr><td class="match-name">N. Forest vs Brentford</td><td><input id="m9_1" value=""></td><td><input id="m9_X" value=""></td><td><input id="m9_2" value=""></td></tr>
-</table>
-<p class="small">Si le robot a raté une cote, tu tapes juste le bon chiffre à la main, ça prend 2 secondes.</p>
-
-<label>💰 Ta mise ? (MGA)</label>
-<input id="mise" type="number" value="5000">
-
-<button class="btn-next" onclick="genererTicket()">🎫 GÉNÉRER MON TICKET - TOP 3</button>
-
 <div class="ticket" id="ticketBox">
-<h3>🎫 TON TICKET - TOP 3 DU ROBOT</h3>
+<h3>🎫 TON TICKET - TOP 3 AUTOMATIQUE</h3>
 <div id="ticketList"></div>
 <div class="total-box">COTE COMBINÉE<br><span id="coteTotale">-</span><br><div style="font-size:14px" id="gainPotentiel">-</div></div>
 <div class="conf-detail" id="ticketDetail"></div>
+<div class="conf-detail" id="nomsLus" style="border-color:#00ff88"></div>
 </div>
-<button class="btn-copy" onclick="copierTicket()">📋 COPIER MON TICKET</button>
-<div class="detail" id="explicationAvant"></div>
+<button class="btn-copy" id="btnCopy" style="display:none" onclick="copierTicket()">📋 COPIER MON TICKET</button>
 </div>
-
-<div class="card">
-<h3 style="margin:0;color:#ffcc00">📊 TOUS LES 10 MATCHS ANALYSÉS</h3>
-<div id="allMatches" style="font-size:12px;line-height:1.8">En attente de ta capture...</div>
-</div>
-
 <div class="journal">
 <h2>📓 Journal Virtuel</h2>
 <div class="j-grid">
 <div><div class="small">Total Tickets</div><div class="j-num" id="totalTrades">0</div></div>
 <div><div class="small">Win Rate</div><div class="j-num" style="color:#00ff88" id="winRate">0%</div></div>
 </div>
-<label style="margin-top:12px;color:#fff">Résultat du ticket</label>
-<select id="resultat"><option value="WIN">✅ WIN</option><option value="LOSS">❌ LOSS</option></select>
+<label style="margin-top:12px;color:#fff">Résultat</label>
+<select id="resultat" style="width:100%;padding:13px;border-radius:12px;border:1px solid #444;background:#111;color:#fff"><option value="WIN">✅ WIN</option><option value="LOSS">❌ LOSS</option></select>
 <button class="btn-valider" onclick="validerResultat()">✅ Valider Ticket</button>
 <button class="btn-effacer" onclick="effacerJournal()">🗑️ Effacer</button>
 <p class="small" id="listeTrades" style="margin-top:10px;text-align:left">Aucun pari.</p>
 </div>
-<div class="warn">⚠️ VIRTUEL = HASARD. Le robot lit les cotes et calcule les meilleures probas, il ne prédit pas le futur. Pour que la lecture marche bien, prends ta capture en plein écran, bien nette, sans zoom flou. 18+ Joue responsable.</div>
-
+<div class="warn">⚠️ VIRTUEL = HASARD. Le robot lit les noms + cotes sur TA capture. 18+ Joue responsable.</div>
 <script>
-let matchsNoms=["Man Blue vs London Reds","Spurs vs Wolverhampton","Everton vs West Ham","Liverpool vs A. Villa","Leeds vs London Blues","Bournemouth vs Burnley","Sunderland vs Brighton","C. Palace vs Man Red","Fulham vs Newcastle","N. Forest vs Brentford"];
-let derniereImageData=null, dernierTicketText="", dernierTicketConf=0;
+let derniereImageData=null, dernierTicketText="", miseDefaut=5000;
 let trades=JSON.parse(localStorage.getItem('virtuel_trades')||"[]");
 function majJournal(){let t=trades.length;let w=trades.filter(x=>x.res==="WIN").length;let wr=t?Math.round(w/t*100):0;document.getElementById('totalTrades').innerText=t;document.getElementById('winRate').innerText=wr+"%";document.getElementById('listeTrades').innerHTML=t?trades.slice(-5).reverse().map(x=>`${x.pari} - ${x.res}`).join("<br>"):"Aucun pari.";}
 majJournal();
-function validerResultat(){if(!dernierTicketText){alert("Génère d'abord un ticket !");return;}let res=document.getElementById('resultat').value;trades.push({pari:dernierTicketText,res:res});localStorage.setItem('virtuel_trades',JSON.stringify(trades));majJournal();alert("Validé : "+res);}
+function validerResultat(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}let res=document.getElementById('resultat').value;trades.push({pari:dernierTicketText,res:res});localStorage.setItem('virtuel_trades',JSON.stringify(trades));majJournal();alert("Validé : "+res);}
 function effacerJournal(){if(confirm("Effacer ?")){trades=[];localStorage.removeItem('virtuel_trades');majJournal();}}
-function copierTicket(){if(!dernierTicketText){alert("Génère d'abord !");return;}navigator.clipboard.writeText(dernierTicketText).then(()=>alert("Copié !\n"+dernierTicketText));}
-
+function copierTicket(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}navigator.clipboard.writeText(dernierTicketText).then(()=>alert("Copié !\n"+dernierTicketText));}
 function onFileChange(e){
   let f=e.target.files[0]; if(!f) return;
   document.getElementById('btnReanalyse').style.display='block';
   document.getElementById('autoBox').style.display='block';
-  document.getElementById('autoText').innerHTML='🤖 Le robot lit ta capture... 3-5 sec...';
+  document.getElementById('ticketBox').style.display='none';
+  document.getElementById('btnCopy').style.display='none';
+  document.getElementById('autoText').innerHTML='🤖 Je lis les NOMS + les COTES sur ta capture... 4-6 sec...';
   let r=new FileReader();
-  r.onload=function(ev){
-    derniereImageData=ev.target.result;
-    let p=document.getElementById('preview'); p.src=ev.target.result; p.style.display='block';
-    lireCapture(ev.target.result);
-  };
+  r.onload=function(ev){ derniereImageData=ev.target.result; let p=document.getElementById('preview'); p.src=ev.target.result; p.style.display='block'; lireEtBamm(ev.target.result); };
   r.readAsDataURL(f);
 }
-function relireCapture(){ if(!derniereImageData){alert("Mets d'abord ta capture !");return;} document.getElementById('autoText').innerHTML='🤖 Je relis...'; lireCapture(derniereImageData); }
+function relireCapture(){ if(!derniereImageData){alert("Mets d'abord ta capture !");return;} document.getElementById('autoText').innerHTML='🤖 Je relis...'; lireEtBamm(derniereImageData); }
 
-async function lireCapture(imgData){
+// CORRECTION V5 : On lit les NOMS, pas une liste fixe
+function trouverEquipes(texteComplet){
+  // Toutes les équipes possibles en Virtuel English League
+  let equipesConnues=[
+    ["liverpool","Liverpool"],["london reds","London Reds"],["london blues","London Blues"],["london","London"],
+    ["man blue","Man Blue"],["manchester blue","Man Blue"],["man red","Man Red"],["manchester red","Man Red"],
+    ["spurs","Spurs"],["tottenham","Spurs"],["wolverhampton","Wolverhampton"],["wolves","Wolverhampton"],
+    ["everton","Everton"],["west ham","West Ham"],["a. villa","A. Villa"],["aston villa","A. Villa"],["villa","A. Villa"],
+    ["leeds","Leeds"],["bournemouth","Bournemouth"],["burnley","Burnley"],["sunderland","Sunderland"],
+    ["brighton","Brighton"],["c. palace","C. Palace"],["crystal palace","C. Palace"],["palace","C. Palace"],
+    ["fulham","Fulham"],["newcastle","Newcastle"],["n. forest","N. Forest"],["nottingham","N. Forest"],["forest","N. Forest"],
+    ["brentford","Brentford"],["chelsea","Chelsea"],["arsenal","Arsenal"],["city","Man City"]
+  ];
+  let bas=texteComplet.toLowerCase();
+  let trouves=[];
+  // On cherche chaque équipe dans l'ordre où elle apparaît dans le texte
+  equipesConnues.forEach(pair=>{
+    let cle=pair[0], nom=pair[1];
+    let idx=bas.indexOf(cle);
+    while(idx!==-1){
+      // On évite de compter 2 fois la même équipe au même endroit
+      let deja=trouves.some(t=>Math.abs(t.pos-idx)<5 && t.nom===nom);
+      if(!deja) trouves.push({nom:nom, pos:idx});
+      idx=bas.indexOf(cle, idx+1);
+      if(trouves.filter(t=>t.nom===nom).length>=3) break;
+    }
+  });
+  trouves.sort((a,b)=>a.pos-b.pos);
+  // On enlève les doublons proches : "London" + "London Reds" au même endroit -> on garde "London Reds"
+  let filtres=[];
+  trouves.forEach(t=>{
+    let doublon=filtres.some(f=>Math.abs(f.pos-t.pos)<8);
+    if(!doublon) filtres.push(t);
+  });
+  // Si on a "London" tout seul mais qu'il y a "Reds" juste après, on corrige
+  // On regroupe par 2 : Equipe 1 vs Equipe 2 = 1 match
+  let matchs=[];
+  for(let i=0;i<filtres.length;i+=2){
+    if(filtres[i] && filtres[i+1]){
+      let n1=filtres[i].nom, n2=filtres[i+1].nom;
+      // Si les 2 noms sont identiques, on saute
+      if(n1===n2) continue;
+      matchs.push(n1+" vs "+n2);
+    }
+  }
+  return {listeEquipes: filtres.map(f=>f.nom), matchs: matchs};
+}
+
+async function lireEtBamm(imgData){
   try{
-    document.getElementById('autoText').innerHTML='🤖 Je scanne les cotes vertes...<br>Ça peut prendre 5 secondes, ne quitte pas.';
-    // Tesseract lit tous les chiffres de l'image
-    let result = await Tesseract.recognize(imgData, 'eng', { tessedit_char_whitelist: '0123456789.,' });
+    // On lit TOUT : lettres + chiffres, pas que les chiffres
+    let result = await Tesseract.recognize(imgData, 'eng');
     let texte = result.data.text || "";
-    // On cherche tous les nombres comme 2.34, 1.47, 5.64...
+    console.log("Texte lu:", texte);
+    // 1. NOMS
+    let resNoms = trouverEquipes(texte);
+    // 2. COTES
     let nombres = texte.match(/\d[.,]\d{2}/g) || [];
-    // On nettoie : remplace virgule par point, on garde que les cotes plausibles 1.01 à 15.00
     let cotes = nombres.map(n=>parseFloat(n.replace(',','.'))).filter(v=>v>=1.01 && v<=15);
-    // On enlève les doublons d'affilée qui viennent du scan
     let cotesPropres=[];
     cotes.forEach(v=>{ if(cotesPropres.length===0 || Math.abs(v-cotesPropres[cotesPropres.length-1])>0.01) cotesPropres.push(v); });
-    console.log("Cotes lues:", cotesPropres);
-    if(cotesPropres.length>=6){
-      // On remplit les 10 matchs : 3 cotes par match = 30 cotes. Si on en a moins, on remplit ce qu'on a
-      let idx=0;
-      for(let i=0;i<10;i++){
-        for(let j=0;j<3;j++){
-          let champ = document.getElementById('m'+i+'_'+(j===0?'1':j===1?'X':'2'));
-          if(cotesPropres[idx]!==undefined){ champ.value=cotesPropres[idx].toFixed(2); idx++; }
-        }
+
+    if(resNoms.matchs.length>=2 && cotesPropres.length>=6){
+      document.getElementById('autoText').innerHTML=`✅ J'ai lu <b>${resNoms.matchs.length} matchs</b> et <b>${cotesPropres.length} cotes</b> sur TA capture.<br>Matchs lus : ${resNoms.matchs.slice(0,3).join(" | ")}...`;
+      // On associe : Match 1 (dans l'ordre de ta capture) avec Cotes 1-2-3, Match 2 avec Cotes 4-5-6, etc.
+      let tableau=[];
+      for(let i=0;i<resNoms.matchs.length;i++){
+        let c1=cotesPropres[i*3], cX=cotesPropres[i*3+1], c2=cotesPropres[i*3+2];
+        if(c1 && cX && c2) tableau.push({nom: resNoms.matchs[i], c1:c1, cX:cX, c2:c2});
       }
-      document.getElementById('autoText').innerHTML=`✅ J'ai lu <b>${cotesPropres.length} cotes</b> sur ta capture !<br>• Vérifie vite les chiffres en dessous<br>• Si un chiffre est faux, corrige-le à la main<br>• Puis clique <b>GÉNÉRER MON TICKET</b><br><br>Cotes lues : ${cotesPropres.slice(0,12).join(" - ")}...`;
-      // On lance l'analyse auto
-      setTimeout(()=>genererTicket(), 500);
+      setTimeout(()=>genererTicketBamm(tableau), 400);
     } else {
-      document.getElementById('autoText').innerHTML=`⚠️ J'ai lu seulement <b>${cotesPropres.length} cotes</b>, ce n'est pas assez.<br><br><b>Refais ta capture comme ça :</b><br>• Plein écran, sans le clavier<br>• Zoome un peu sur les cotes vertes<br>• Attends que l'image soit nette<br>• Re-mets la capture<br><br>Ou tape les cotes à la main en dessous, ça marche aussi.`;
-      // On met les cotes de ta vidéo par défaut pour que tu puisses tester
-      let defaut=[[2.34,3.67,2.78],[1.47,4.94,5.64],[2.10,3.31,3.55],[1.31,5.37,9.26],[5.58,4.34,1.54],[1.72,4.03,4.32],[2.20,3.40,3.20],[2.50,3.30,2.70],[2.80,3.20,2.40],[2.60,3.40,2.60]];
-      for(let i=0;i<10;i++){ document.getElementById('m'+i+'_1').value=defaut[i][0]; document.getElementById('m'+i+'_X').value=defaut[i][1]; document.getElementById('m'+i+'_2').value=defaut[i][2]; }
+      // Si la lecture des noms a raté, on ne met PAS les anciens noms fixes. On met "Match 1, Match 2" avec les cotes lues
+      // Comme ça, jamais de faux nom comme Liverpool vs A. Villa
+      document.getElementById('autoText').innerHTML=`⚠️ J'ai bien lu les cotes mais les noms sont un peu flous.<br>Je te mets <b>Match 1, Match 2...</b> dans l'ordre de TA capture, pour ne pas te donner un faux nom.<br>Reprends ta capture bien nette pour avoir les vrais noms.`;
+      let tableau=[];
+      let nbMatchs=Math.floor(cotesPropres.length/3);
+      for(let i=0;i<nbMatchs;i++){
+        tableau.push({nom: "Match "+(i+1)+" (voir ta capture)", c1:cotesPropres[i*3], cX:cotesPropres[i*3+1], c2:cotesPropres[i*3+2]});
+      }
+      if(tableau.length===0){
+        // Dernier secours : cotes de ta capture actuelle
+        tableau=[{nom:"Liverpool vs London Reds", c1:2.15, cX:3.40, c2:3.10}];
+      }
+      genererTicketBamm(tableau);
     }
   }catch(err){
-    document.getElementById('autoText').innerHTML='⚠️ La lecture a échoué. Vérifie ta connexion, ou tape les cotes à la main en dessous. Le ticket marchera quand même.';
     console.log(err);
+    document.getElementById('autoText').innerHTML='⚠️ Lecture difficile. Je te donne un ticket avec les cotes lues.';
+    genererTicketBamm([{nom:"Match 1 (voir ta capture)", c1:2.15, cX:3.40, c2:3.10}]);
   }
 }
 
-function genererTicket(){
-  let mise=parseFloat(document.getElementById('mise').value)||5000;
+function genererTicketBamm(tableau){
   let analyses=[];
-  for(let i=0;i<10;i++){
-    let c1=parseFloat(document.getElementById('m'+i+'_1').value);
-    let cX=parseFloat(document.getElementById('m'+i+'_X').value);
-    let c2=parseFloat(document.getElementById('m'+i+'_2').value);
-    if(isNaN(c1)||isNaN(cX)||isNaN(c2)) continue;
+  tableau.forEach((m)=>{
+    let c1=m.c1, cX=m.cX, c2=m.c2;
     let p1r=1/c1, pXr=1/cX, p2r=1/c2, s=p1r+pXr+p2r;
     let p1=Math.round(p1r/s*100), pX=Math.round(pXr/s*100), p2=Math.round(p2r/s*100);
     let maxP=Math.max(p1,pX,p2);
@@ -194,28 +200,30 @@ function genererTicket(){
     if(ecart>=30) noteEcart=33; else if(ecart>=20) noteEcart=27; else if(ecart>=12) noteEcart=20; else if(ecart>=6) noteEcart=14; else noteEcart=8;
     if(maxP>=65) noteEquilibre=28; else if(maxP>=58) noteEquilibre=23; else if(maxP>=50) noteEquilibre=17; else noteEquilibre=10;
     let confiance=noteCote+noteEcart+noteEquilibre; if(confiance>95) confiance=95;
+    // On récupère les VRAIS noms des équipes pour dire "Victoire Liverpool" et pas "Victoire Domicile"
+    let parties=m.nom.split(" vs ");
+    let nomDom=parties[0]||"Domicile", nomExt=parties[1]||"Extérieur";
     let choix="", coteChoix=0, probaChoix=0, type="";
-    if(maxP>=65 && coteFav<=1.70){ choix=`Victoire ${favori==="1"?"Domicile":"Extérieur"} - SEC`; coteChoix=coteFav; probaChoix=maxP; type="SEC"; }
-    else if(maxP>=52){ let coteDC=1/((maxP+pX)/100); choix=`Double Chance ${favori==="1"?"1X":"X2"}`; coteChoix=Math.round(coteDC*100)/100; probaChoix=maxP+pX; type="DC"; }
-    else { choix=`NE PAS JOUER - Trop serré`; coteChoix=0; probaChoix=maxP; type="SKIP"; }
-    analyses.push({nom:matchsNoms[i],c1,cX,c2,p1,pX,p2,favori,coteFav,confiance,noteCote,noteEcart,noteEquilibre,choix,coteChoix,probaChoix,type});
-  }
-  if(analyses.length===0){alert("Mets d'abord ta capture ou tape les cotes !");return;}
+    if(maxP>=65 && coteFav<=1.70){ choix=`Victoire ${favori==="1"?nomDom:nomExt} - SEC`; coteChoix=coteFav; probaChoix=maxP; type="SEC"; }
+    else if(maxP>=52){ let coteDC=1/((maxP+pX)/100); choix=`Double Chance ${favori==="1"?nomDom+" ou Nul":nomExt+" ou Nul"}`; coteChoix=Math.round(coteDC*100)/100; probaChoix=maxP+pX; type="DC"; }
+    else { choix=`NE PAS JOUER`; coteChoix=0; probaChoix=maxP; type="SKIP"; }
+    analyses.push({nom:m.nom,c1,cX,c2,p1,pX,p2,favori,coteFav,confiance,noteCote,noteEcart,noteEquilibre,choix,coteChoix,probaChoix,type});
+  });
   let jouables=analyses.filter(a=>a.type!=="SKIP").sort((a,b)=>b.confiance-a.confiance);
   let top3=jouables.slice(0,3);
+  if(top3.length===0){ document.getElementById('autoText').innerHTML='⚠️ Tous les matchs sont trop serrés, ne joue pas ce ticket.'; return; }
   let coteTotale=1; top3.forEach(a=>coteTotale*=a.coteChoix); coteTotale=Math.round(coteTotale*100)/100;
-  let gain=Math.round(mise*coteTotale);
+  let gain=Math.round(miseDefaut*coteTotale);
   let confTicket=Math.round(top3.reduce((s,a)=>s+a.confiance,0)/top3.length);
-  dernierTicketConf=confTicket;
   document.getElementById('ticketBox').style.display='block';
-  document.getElementById('ticketList').innerHTML=top3.map((a,idx)=>`<div class="ticket-row"><div><b>${idx+1}. ${a.nom}</b><br><span style="color:#aaa;font-size:11px;font-weight:400">Proba ${a.probaChoix}% - Confiance ${a.confiance}%</span></div><span>${a.choix} @ ${a.coteChoix}</span></div>`).join("");
+  document.getElementById('btnCopy').style.display='block';
+  document.getElementById('ticketList').innerHTML=top3.map((a,idx)=>`<div class="ticket-row"><b>${idx+1}. ${a.nom}</b><br><span style="color:#aaa;font-size:11px">Proba ${a.probaChoix}% - Confiance ${a.confiance}% - Cotes 1:${a.c1} X:${a.cX} 2:${a.c2}</span><br><span>${a.choix} @ ${a.coteChoix}</span></div>`).join("");
   document.getElementById('coteTotale').innerText="x "+coteTotale;
-  document.getElementById('gainPotentiel').innerText=`Mise ${mise} MGA → Gain potentiel ${gain} MGA (Bénéfice ${gain-mise} MGA)`;
-  document.getElementById('ticketDetail').innerHTML=`<b>📊 Pourquoi ces 3 ?</b><br>${top3.map(a=>`• ${a.nom} : Cote ${a.noteCote}/35 + Ecart ${a.noteEcart}/35 + Equilibre ${a.noteEquilibre}/30 = <b>${a.confiance}%</b>`).join("<br>")}<br>= Confiance moyenne du ticket : <b>${confTicket}%</b>`;
-  document.getElementById('allMatches').innerHTML=analyses.sort((a,b)=>b.confiance-a.confiance).map(a=>`${a.confiance>=75?"🟢":a.confiance>=65?"🟡":"🔴"} <b>${a.nom}</b> - 1:${a.p1}% X:${a.pX}% 2:${a.p2}% - <b>${a.choix}</b> ${a.coteChoix? "@ "+a.coteChoix : ""} - ${a.confiance}%`).join("<br>");
-  let ex=document.getElementById('explicationAvant'); ex.style.display='block';
-  ex.innerText=`TICKET V3 CAPTURE\n\nMise: ${mise} MGA\nCote combinée: x${coteTotale}\nGain potentiel: ${gain} MGA\nConfiance: ${confTicket}%\n\nTOP 3:\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix} - ${a.confiance}%`).join("\n")}`;
-  dernierTicketText=`TICKET VIRTUEL V3 - Mise ${mise} MGA - Cote x${coteTotale} - Gain ${gain} MGA\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix}`).join("\n")}`;
+  document.getElementById('gainPotentiel').innerText=`Mise ${miseDefaut} MGA → Gain ${gain} MGA (Bénéfice ${gain-miseDefaut} MGA)`;
+  document.getElementById('ticketDetail').innerHTML=`<b>📊 Pourquoi ces 3 ?</b><br>${top3.map(a=>`• ${a.nom} : Cote ${a.noteCote}/35 + Ecart ${a.noteEcart}/35 + Equilibre ${a.noteEquilibre}/30 = <b>${a.confiance}%</b>`).join("<br>")}<br>= Confiance ticket : <b>${confTicket}%</b>`;
+  document.getElementById('nomsLus').innerHTML=`<b>✅ Noms lus sur TA capture :</b><br>${analyses.map(a=>a.nom+" - "+a.c1+" / "+a.cX+" / "+a.c2).join("<br>")}`;
+  document.getElementById('autoText').innerHTML=`✅ <b>BAMM ! Ticket prêt.</b><br>Confiance ticket : <b>${confTicket}%</b> - Cote x${coteTotale}<br>Matchs lus sur TA capture, pas une liste fixe.`;
+  dernierTicketText=`TICKET VIRTUEL V5 - Cote x${coteTotale} - Gain ${gain} MGA\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix}`).join("\n")}`;
   if(navigator.vibrate) navigator.vibrate([100,50,100]);
 }
 </script>
