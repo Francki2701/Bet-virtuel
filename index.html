@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VIRTUEL SIMPLE</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#000;color:#fff;font-family:Arial;padding:12px}
 h1{text-align:center;color:#00ff88;font-size:26px;margin:10px 0 2px}
 .sous{text-align:center;color:#ffcc00;font-size:12px;font-weight:900;margin-bottom:14px}
 .card{background:#0a0a0a;border:2px solid #00c853;border-radius:18px;padding:14px}
-input{width:100%;padding:14px;border-radius:12px;border:1px solid #444;background:#111;color:#fff;font-size:15px}
+input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;background:#111;color:#fff;font-size:15px}
 img{width:100%;border-radius:12px;margin-top:10px;display:none;max-height:220px;object-fit:cover}
 button{width:100%;background:#00c853;color:#fff;padding:16px;border:0;border-radius:14px;font-weight:900;font-size:18px;margin-top:12px}
 button:disabled{background:#333}
@@ -25,6 +26,8 @@ button:disabled{background:#333}
 .m .fill{height:100%;background:#00ff88}
 .total{background:#ffcc00;color:#000;border-radius:12px;padding:12px;text-align:center;font-weight:900;margin-top:10px}
 .total span{font-size:26px}
+.keybox{background:#111;border:1px dashed #ffcc00;border-radius:12px;padding:10px;margin-top:10px}
+.keybox label{font-size:12px;color:#ffcc00}
 </style>
 </head>
 <body>
@@ -36,6 +39,14 @@ button:disabled{background:#333}
 <img id="preview">
 <button id="btn" onclick="analyser()">🔍 ANALYSER</button>
 <div id="msg">Mets ta capture Bet261, puis clique ANALYSER.</div>
+
+<!-- ⭐ TA CLÉ, 1 SEULE FOIS -->
+<div class="keybox">
+<label>🔑 TA CLÉ GRATUITE (1 fois, après il la garde) - Si tu ne la mets pas, ça marche 1 fois puis "Serveur occupé"</label>
+<input type="text" id="apiKey" placeholder="Colle ta clé ici, ex: K8xxxxxxxx - Sinon laisse helloworld" style="margin-top:6px">
+<button onclick="sauverCle()" style="padding:10px;font-size:14px;background:#ffcc00;color:#000;margin-top:8px">💾 SAUVEGARDER MA CLÉ</button>
+<div style="font-size:11px;color:#aaa;margin-top:6px;line-height:1.5">Pour avoir ta clé : va sur <b style="color:#fff">ocr.space/ocrapi</b> → mets ton email → Get Free API Key → copie la clé reçue par email → colle-la ici.</div>
+</div>
 </div>
 
 <div class="result" id="res">
@@ -46,13 +57,21 @@ button:disabled{background:#333}
 
 <script>
 let imgData=null;
+let cleStockee=localStorage.getItem('ma_cle_ocr')||'helloworld';
+document.getElementById('apiKey').value = cleStockee==='helloworld' ? '' : cleStockee;
+function sauverCle(){
+  let v=document.getElementById('apiKey').value.trim();
+  if(!v){ alert('Colle d\'abord ta clé !'); return; }
+  localStorage.setItem('ma_cle_ocr',v);
+  cleStockee=v;
+  alert('✅ Clé sauvegardée ! Maintenant ça ne dira plus "Serveur occupé".');
+}
 document.getElementById('file').onchange=e=>{
   let f=e.target.files[0]; if(!f) return;
   let r=new FileReader();
   r.onload=ev=>{ imgData=ev.target.result; let p=document.getElementById('preview'); p.src=imgData; p.style.display='block'; document.getElementById('msg').innerText='✅ Capture prête. Clique ANALYSER.'; };
   r.readAsDataURL(f);
 };
-
 function nomPropre(n){
   n=n.toLowerCase();
   if(n.includes('manchester red')||n.includes('man red')) return 'Manchester Red';
@@ -79,97 +98,83 @@ function nomPropre(n){
   if(n.includes('arsenal')) return 'Arsenal';
   return null;
 }
-
+function extraire(texte){
+  let cotes=(texte.match(/\d[.,]\d{2}/g)||[]).map(x=>parseFloat(x.replace(',','.'))).filter(v=>v>=1.01&&v<=20);
+  let bas=texte.toLowerCase();
+  let listeNoms=['manchester red','manchester blue','london reds','london blues','liverpool','spurs','tottenham','wolverhampton','wolves','everton','west ham','aston villa','a. villa','leeds','bournemouth','burnley','sunderland','brighton','crystal palace','c. palace','fulham','newcastle','nottingham','n. forest','brentford','chelsea','arsenal','man red','man blue'];
+  let pos=[]; listeNoms.forEach(nom=>{ let s=0; while(true){ let i=bas.indexOf(nom,s); if(i===-1) break; pos.push({p:i,n:nomPropre(nom)}); s=i+1; } });
+  pos.sort((a,b)=>a.p-b.p);
+  let noms=[]; pos.forEach(x=>{ if(!noms.some(y=>Math.abs(y.p-x.p)<6)) noms.push(x); });
+  let matchs=[];
+  let nb=Math.min(Math.floor(noms.length/2), Math.floor(cotes.length/3));
+  for(let i=0;i<nb;i++){ let d=noms[i*2].n, e=noms[i*2+1].n; if(d===e) continue; matchs.push({nom:d+' vs '+e,c1:cotes[i*3],cx:cotes[i*3+1],c2:cotes[i*3+2]}); }
+  return matchs;
+}
+function afficher(matchs, btn){
+  let analyses=matchs.map(m=>{
+    let s=1/m.c1+1/m.cx+1/m.c2;
+    let p1=Math.round(1/m.c1/s*100), px=Math.round(1/m.cx/s*100), p2=Math.round(1/m.c2/s*100);
+    let max=Math.max(p1,px,p2);
+    let parties=m.nom.split(' vs ');
+    let gagnant = p1===max ? parties[0] : p2===max ? parties[1] : 'Match Nul';
+    let coteGagnant = p1===max ? m.c1 : p2===max ? m.c2 : m.cx;
+    let piege = coteGagnant < 1.35;
+    return {...m, p1, px, p2, gagnant, coteGagnant, chance:max, risque:100-max, piege};
+  });
+  let top3=analyses.filter(a=>!a.piege).sort((a,b)=>b.chance-a.chance).slice(0,3);
+  if(top3.length===0) top3=analyses.slice(0,3);
+  let coteTot=1; top3.forEach(a=>coteTot*=a.coteGagnant); coteTot=Math.round(coteTot*100)/100;
+  let chanceTot=1; top3.forEach(a=>chanceTot*=a.chance/100); chanceTot=Math.round(chanceTot*100);
+  document.getElementById('liste').innerHTML=top3.map((a,i)=>`
+    <div class="m"><b>${i+1}. ${a.nom}</b><br>
+    <span style="color:#aaa;font-size:12px">${a.c1} / ${a.cx} / ${a.c2} - Proba 1:${a.p1}% X:${a.px}% 2:${a.p2}%</span>
+    <span class="win">✅ ${a.gagnant} gagne @ ${a.coteGagnant}</span>
+    <div class="bar"><div class="fill" style="width:${a.chance}%"></div></div>
+    <span style="color:#00ff88;font-weight:900">🟢 ${a.chance}% de gagner</span>
+    <span class="lose">🔴 ${a.risque}% de perdre</span></div>`).join('');
+  document.getElementById('coteTot').innerText='x '+coteTot;
+  document.getElementById('gain').innerText='Mise 5000 MGA → Gain '+Math.round(5000*coteTot)+' MGA - Chance les 3 : '+chanceTot+'% - Risque : '+(100-chanceTot)+'%';
+  document.getElementById('res').style.display='block';
+  document.getElementById('msg').innerText='✅ Voilà tes 3 matchs.';
+  btn.disabled=false; btn.innerText='🔍 ANALYSER';
+  document.getElementById('res').scrollIntoView({behavior:'smooth'});
+}
 async function analyser(){
   if(!imgData){ alert('Mets d\'abord ta capture !'); return; }
   let btn=document.getElementById('btn'); btn.disabled=true; btn.innerText='⏳ JE LIS...';
   document.getElementById('msg').innerText='Je lis ta capture, attends 5 secondes...';
   document.getElementById('res').style.display='none';
-
   try{
-    // On agrandit x2 pour mieux lire
     let img=new Image();
     img.onload=async ()=>{
       let c=document.createElement('canvas'); c.width=img.width*2; c.height=img.height*2;
       c.getContext('2d').drawImage(img,0,0,c.width,c.height);
       let grand=c.toDataURL('image/jpeg',0.9);
-
-      // On essaie 3 fois si le serveur est occupé
+      // ESSAI 1 : Serveur avec TA clé
       let texte='';
-      for(let essai=0; essai<3; essai++){
-        try{
-          let f=new FormData();
-          f.append('base64Image',grand); f.append('language','eng'); f.append('scale','true'); f.append('OCREngine','2');
-          let r=await fetch('https://api.ocr.space/parse/image',{method:'POST',headers:{'apikey':'helloworld'},body:f});
-          let d=await r.json();
-          texte=d?.ParsedResults?.[0]?.ParsedText||'';
-          if(texte.length>20) break;
-        }catch(e){}
-      }
-
-      if(!texte || texte.length<20){
-        document.getElementById('msg').innerHTML='⚠️ Serveur occupé. Coupe ta capture plus serrée, juste les lignes vertes, et reclique ANALYSER.';
-        btn.disabled=false; btn.innerText='🔍 ANALYSER'; return;
-      }
-
-      // Cotes dans l'ordre
-      let cotes=(texte.match(/\d[.,]\d{2}/g)||[]).map(x=>parseFloat(x.replace(',','.'))).filter(v=>v>=1.01&&v<=20);
-      // Noms dans l'ordre
-      let bas=texte.toLowerCase();
-      let listeNoms=['manchester red','manchester blue','london reds','london blues','liverpool','spurs','tottenham','wolverhampton','wolves','everton','west ham','aston villa','a. villa','leeds','bournemouth','burnley','sunderland','brighton','crystal palace','c. palace','fulham','newcastle','nottingham','n. forest','brentford','chelsea','arsenal','man red','man blue'];
-      let pos=[]; listeNoms.forEach(nom=>{ let s=0; while(true){ let i=bas.indexOf(nom,s); if(i===-1) break; pos.push({p:i,n:nomPropre(nom)}); s=i+1; } });
-      pos.sort((a,b)=>a.p-b.p);
-      let noms=[]; pos.forEach(x=>{ if(!noms.some(y=>Math.abs(y.p-x.p)<6)) noms.push(x); });
-
-      let matchs=[];
-      let nb=Math.min(Math.floor(noms.length/2), Math.floor(cotes.length/3));
-      for(let i=0;i<nb;i++){
-        let d=noms[i*2].n, e=noms[i*2+1].n;
-        if(d===e) continue;
-        matchs.push({nom:d+' vs '+e, c1:cotes[i*3], cx:cotes[i*3+1], c2:cotes[i*3+2]});
-      }
-
-      if(matchs.length===0){
-        document.getElementById('msg').innerHTML='⚠️ Je n\'ai rien lu. Coupe plus serrée, juste les lignes vertes, et reclique.';
-        btn.disabled=false; btn.innerText='🔍 ANALYSER'; return;
-      }
-
-      // On calcule qui gagne + % gagne / % perd
-      let analyses=matchs.map(m=>{
-        let s=1/m.c1+1/m.cx+1/m.c2;
-        let p1=Math.round(1/m.c1/s*100), px=Math.round(1/m.cx/s*100), p2=Math.round(1/m.c2/s*100);
-        let max=Math.max(p1,px,p2);
-        let parties=m.nom.split(' vs ');
-        let gagnant = p1===max ? parties[0] : p2===max ? parties[1] : 'Match Nul';
-        let coteGagnant = p1===max ? m.c1 : p2===max ? m.c2 : m.cx;
-        // Si cote trop basse = piège, on saute
-        let piege = coteGagnant < 1.35;
-        return {...m, p1, px, p2, gagnant, coteGagnant, chance:max, risque:100-max, piege};
-      });
-
-      // On choisit les 3 meilleurs, sans les pièges
-      let top3=analyses.filter(a=>!a.piege).sort((a,b)=>b.chance-a.chance).slice(0,3);
-      if(top3.length===0) top3=analyses.slice(0,3);
-
-      let coteTot=1; top3.forEach(a=>coteTot*=a.coteGagnant); coteTot=Math.round(coteTot*100)/100;
-      let chanceTot=1; top3.forEach(a=>chanceTot*=a.chance/100); chanceTot=Math.round(chanceTot*100);
-
-      document.getElementById('liste').innerHTML=top3.map((a,i)=>`
-        <div class="m">
-          <b>${i+1}. ${a.nom}</b><br>
-          <span style="color:#aaa;font-size:12px">${a.c1} / ${a.cx} / ${a.c2} - Proba 1:${a.p1}% X:${a.px}% 2:${a.p2}%</span>
-          <span class="win">✅ ${a.gagnant} gagne @ ${a.coteGagnant}</span>
-          <div class="bar"><div class="fill" style="width:${a.chance}%"></div></div>
-          <span style="color:#00ff88;font-weight:900">🟢 ${a.chance}% de gagner</span>
-          <span class="lose">🔴 ${a.risque}% de perdre</span>
-        </div>`).join('');
-
-      document.getElementById('coteTot').innerText='x '+coteTot;
-      document.getElementById('gain').innerText='Mise 5000 MGA → Gain '+Math.round(5000*coteTot)+' MGA - Chance les 3 : '+chanceTot+'% - Risque : '+(100-chanceTot)+'%';
-      document.getElementById('res').style.display='block';
-      document.getElementById('msg').innerText='✅ Voilà tes 3 matchs.';
+      try{
+        let f=new FormData();
+        f.append('base64Image',grand); f.append('language','eng'); f.append('scale','true'); f.append('OCREngine','2');
+        let r=await fetch('https://api.ocr.space/parse/image',{method:'POST',headers:{'apikey':cleStockee},body:f});
+        let d=await r.json();
+        texte=d?.ParsedResults?.[0]?.ParsedText||'';
+        // Si le serveur dit "limite" ou vide, on passe au secours
+        if(d && d.OCRExitCode!==1) texte='';
+      }catch(e){ texte=''; }
+      let matchs=extraire(texte);
+      if(matchs.length>=1){ afficher(matchs,btn); return; }
+      // ESSAI 2 : SECOURS - Lecture dans ton téléphone, sans serveur
+      document.getElementById('msg').innerText='Serveur occupé, j\'essaie dans ton téléphone... attends 10 sec...';
+      try{
+        let worker=await Tesseract.createWorker('eng');
+        await worker.setParameters({tessedit_pageseg_mode:'6'});
+        let ret=await worker.recognize(grand);
+        await worker.terminate();
+        let m2=extraire(ret.data.text||'');
+        if(m2.length>=1){ afficher(m2,btn); return; }
+      }catch(e){}
+      document.getElementById('msg').innerHTML='⚠️ Ça a raté. <b>Prends ta propre clé gratuite :</b> va sur <b>ocr.space/ocrapi</b>, mets ton email, copie ta clé, colle-la dans le cadre jaune en haut, clique SAUVEGARDER, puis reclique ANALYSER. Avec ta clé, ça ne bloque plus.';
       btn.disabled=false; btn.innerText='🔍 ANALYSER';
-      document.getElementById('res').scrollIntoView({behavior:'smooth'});
     };
     img.src=imgData;
   }catch(e){
