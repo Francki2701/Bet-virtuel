@@ -2,214 +2,180 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>VIRTUEL V12 CAPTURE BAM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VIRTUEL SIMPLE</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#000;color:#fff;font-family:Arial;padding:0;padding-bottom:20px}
-.top{padding:14px;text-align:center;background:linear-gradient(180deg,#0a2a00,#000);border-bottom:2px solid #00c853;position:sticky;top:0;z-index:10}
-.top h1{font-size:28px;margin:0;color:#00ff88}
-.top p{color:#ffcc00;font-size:11px;margin:4px 0 0;font-weight:900}
-.card{margin:12px;background:linear-gradient(180deg,#0a2a00,#0a0a0a);border:2px solid #00c853;border-radius:20px;padding:14px}
-label{font-size:13px;color:#ffcc00;font-weight:900;display:block;margin:10px 0 6px}
-input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;background:#111;color:#fff;font-size:15px}
-.preview{width:100%;border-radius:12px;margin-top:8px;display:none;border:1px solid #333;max-height:220px;object-fit:cover}
-.status{background:#111;border:1px solid #00ff88;border-radius:12px;padding:12px;font-size:13px;line-height:1.7;display:none;margin-top:10px}
-.bar{height:8px;background:#222;border-radius:10px;overflow:hidden;margin-top:8px;display:none}
-.bar div{height:100%;width:0%;background:#00ff88;transition:width .3s}
-/* TICKET EXACTEMENT COMME TA PHOTO */
-.ticket{background:#001a0a;border:2px solid #00ff88;border-radius:16px;padding:14px;margin-top:12px;display:none}
-.ticket h3{margin:0 0 10px;color:#00ff88;font-size:16px}
-.ticket-row{background:#111;border-radius:12px;padding:12px;margin-bottom:8px}
-.ticket-row b{font-size:15px}
-.ticket-row span{color:#00ff88;font-weight:900}
-.ticket-row .proba{color:#aaa;font-weight:400;font-size:11px}
-.ticket-row .risque{color:#ff1744 !important}
-.total-box{background:#ffcc00;color:#000;border-radius:12px;padding:14px;text-align:center;font-weight:900;margin-top:10px}
-.total-box span{font-size:28px}
-.conf-detail{background:#111;border:1px solid #333;border-radius:10px;padding:10px;font-size:12px;line-height:1.8;text-align:left;margin-top:10px}
-.conf-detail b{color:#ffcc00}
-.small{font-size:11px;color:#aaa;text-align:center;margin-top:8px;line-height:1.5}
-.btn-copy{width:100%;background:#ffcc00;color:#000;padding:14px;border:0;border-radius:12px;font-weight:900;font-size:16px;margin-top:8px}
-.btn-reanalyse{width:100%;background:#00c853;color:#fff;padding:13px;border:0;border-radius:12px;font-weight:900;font-size:15px;margin-top:8px;display:none}
-.btn-add{width:100%;background:#00c853;color:#fff;padding:14px;border:0;border-radius:12px;font-weight:900;font-size:15px;margin-top:8px}
-.journal{margin:12px;background:#0a0a0a;border:2px solid #333;border-radius:20px;padding:14px}
-.journal h2{font-size:16px;margin:0 0 10px;color:#00ff88}
-.j-grid{display:flex;gap:8px}.j-grid>div{flex:1;background:#111;padding:12px;border-radius:12px;text-align:center}
-.j-num{font-size:24px;font-weight:900}
-.btn-valider{width:100%;background:#007bff;color:#fff;padding:14px;border:0;border-radius:12px;font-weight:900;font-size:16px;margin-top:10px}
-.btn-effacer{width:100%;background:#ff1744;color:#fff;padding:14px;border:0;border-radius:12px;font-weight:900;font-size:16px;margin-top:8px}
-.manuel{background:#111;border:1px dashed #ffcc00;border-radius:12px;padding:12px;margin-top:10px;display:none}
-.row{display:flex;gap:8px}.row>div{flex:1}
-.row3{display:flex;gap:8px}.row3>div{flex:1}
-.row3 input{text-align:center;color:#00ff88;font-weight:900;font-size:16px}
+body{margin:0;background:#000;color:#fff;font-family:Arial;padding:12px}
+h1{text-align:center;color:#00ff88;font-size:26px;margin:10px 0 2px}
+.sous{text-align:center;color:#ffcc00;font-size:12px;font-weight:900;margin-bottom:14px}
+.card{background:#0a0a0a;border:2px solid #00c853;border-radius:18px;padding:14px}
+input{width:100%;padding:14px;border-radius:12px;border:1px solid #444;background:#111;color:#fff;font-size:15px}
+img{width:100%;border-radius:12px;margin-top:10px;display:none;max-height:220px;object-fit:cover}
+button{width:100%;background:#00c853;color:#fff;padding:16px;border:0;border-radius:14px;font-weight:900;font-size:18px;margin-top:12px}
+button:disabled{background:#333}
+#msg{text-align:center;font-size:13px;color:#aaa;margin-top:10px;line-height:1.6}
+.result{background:#001a0a;border:2px solid #00ff88;border-radius:16px;padding:14px;margin-top:14px;display:none}
+.result h2{color:#00ff88;margin:0 0 10px;font-size:17px;text-align:center}
+.m{background:#111;border-radius:12px;padding:12px;margin-bottom:10px}
+.m b{font-size:16px}
+.m .win{color:#00ff88;font-weight:900;font-size:16px;display:block;margin-top:6px}
+.m .lose{color:#ff1744;font-weight:900;font-size:14px;display:block}
+.m .bar{height:9px;background:#222;border-radius:10px;overflow:hidden;margin:8px 0}
+.m .fill{height:100%;background:#00ff88}
+.total{background:#ffcc00;color:#000;border-radius:12px;padding:12px;text-align:center;font-weight:900;margin-top:10px}
+.total span{font-size:26px}
 </style>
 </head>
 <body>
-<div class="top">
-<h1>⚡ VIRTUEL V12 CAPTURE BAM</h1>
-<p>CAPTURE → BAM → RÉSULTAT - TU NE TAPES RIEN</p>
-</div>
+<h1>⚡ VIRTUEL SIMPLE</h1>
+<div class="sous">CAPTURE → BOUTON → RÉSULTAT</div>
+
 <div class="card">
-<label>📸 TA CAPTURE BET261 - C'EST TOUT</label>
-<input type="file" id="fileInput" accept="image/*" onchange="onFileChange(event)">
-<img id="preview" class="preview">
-<button class="btn-reanalyse" id="btnReanalyse" onclick="relireCapture()">🔄 RE-ANALYSER</button>
-<div class="status" id="autoBox"><b>🤖 <span id="autoText">Prêt ! Envoie ta capture.</span></b><div class="bar" id="barBox"><div id="barFill"></div></div><div class="small" id="texteLu" style="text-align:left;display:none"></div></div>
-
-<!-- SECOURS : s'affiche SEULEMENT si la capture donne 0 cotes, pour avoir le même résultat que ta photo -->
-<div class="manuel" id="manuelBox">
-<label>⚠️ La capture n'a pas lu les cotes. Tape-les ici pour avoir le même résultat :</label>
-<div class="row"><div><select id="domSelect"></select></div><div><select id="extSelect"></select></div></div>
-<div class="row3" style="margin-top:8px"><div><input type="number" id="c1Input" placeholder="1.45" step="0.01" inputmode="decimal"></div><div><input type="number" id="cxInput" placeholder="4.79" step="0.01" inputmode="decimal"></div><div><input type="number" id="c2Input" placeholder="6.27" step="0.01" inputmode="decimal"></div></div>
-<button class="btn-add" onclick="ajouterManuel()">➕ AJOUTER CE MATCH → VOIR TICKET COMME V12</button>
-<div id="listeManuel" style="margin-top:8px;font-size:13px"></div>
+<input type="file" id="file" accept="image/*">
+<img id="preview">
+<button id="btn" onclick="analyser()">🔍 ANALYSER</button>
+<div id="msg">Mets ta capture Bet261, puis clique ANALYSER.</div>
 </div>
 
-<div class="ticket" id="ticketBox">
-<h3>🎫 TON TICKET - TOP 3 BAM</h3>
-<div id="ticketList"></div>
-<div class="total-box">COTE COMBINÉE<br><span id="coteTotale">-</span><br><div style="font-size:14px" id="gainPotentiel">-</div><div style="font-size:12px;margin-top:6px" id="chanceCombinee"></div></div>
-<div class="conf-detail" id="ticketDetail"></div>
-<div class="conf-detail" id="tousMatchs"></div>
+<div class="result" id="res">
+<h2>🎫 LES 3 MATCHS CHOISIS</h2>
+<div id="liste"></div>
+<div class="total">COTE COMBINÉE<br><span id="coteTot">-</span><br><div style="font-size:14px" id="gain"></div></div>
 </div>
-<button class="btn-copy" id="btnCopy" style="display:none" onclick="copierTicket()">📋 COPIER MON TICKET</button>
-<label>💰 TA MISE (MGA)</label>
-<input type="number" id="miseInput" value="5000" inputmode="numeric" onchange="changerMise()">
-</div>
-<div class="journal">
-<h2>📓 Journal</h2>
-<div class="j-grid"><div><div class="small">Total</div><div class="j-num" id="totalTrades">0</div></div><div><div class="small">Win Rate</div><div class="j-num" style="color:#00ff88" id="winRate">0%</div></div></div>
-<select id="resultat" style="margin-top:10px"><option value="WIN">✅ WIN</option><option value="LOSS">❌ LOSS</option></select>
-<button class="btn-valider" onclick="validerResultat()">✅ Valider Ticket</button>
-<button class="btn-effacer" onclick="effacerJournal()">🗑️ Effacer</button>
-<p class="small" id="listeTrades" style="margin-top:10px;text-align:left">Aucun pari.</p>
-</div>
-<p class="small">V23 = Design V12 exactement comme ta photo.<br>18+ Joue responsable.</p>
+
 <script>
-let derniereImageData=null, dernierTicketText="", miseDefaut=5000, dernierTableau=null;
-let trades=JSON.parse(localStorage.getItem('virtuel_v23_trades')||"[]");
-let equipes=["Liverpool","Wolverhampton","N. Forest","Leeds","Manchester Red","Fulham","Spurs","Brighton","Burnley","London Reds","London Blues","Everton","Manchester Blue","A. Villa","West Ham","Bournemouth","Sunderland","C. Palace","Newcastle","Brentford","Chelsea","Arsenal"];
-let domSel=document.getElementById('domSelect'), extSel=document.getElementById('extSelect');
-equipes.forEach(e=>{ domSel.innerHTML+=`<option>${e}</option>`; extSel.innerHTML+=`<option>${e}</option>`; });
-domSel.value="Burnley"; extSel.value="Wolverhampton";
-let tableauManuel=[];
-function changerMise(){ let v=parseInt(document.getElementById('miseInput').value); if(v&&v>0){ miseDefaut=v; if(dernierTableau) genererTicketBamm(dernierTableau); } }
-function majJournal(){let t=trades.length;let w=trades.filter(x=>x.res==="WIN").length;let wr=t?Math.round(w/t*100):0;document.getElementById('totalTrades').innerText=t;document.getElementById('winRate').innerText=wr+"%";document.getElementById('listeTrades').innerHTML=t?trades.slice(-5).reverse().map(x=>`${x.pari} - ${x.res}`).join("<br>"):"Aucun pari.";}
-majJournal();
-function validerResultat(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}let res=document.getElementById('resultat').value;trades.push({pari:dernierTicketText,res:res});localStorage.setItem('virtuel_v23_trades',JSON.stringify(trades));majJournal();alert("Validé : "+res);}
-function effacerJournal(){if(confirm("Effacer ?")){trades=[];localStorage.removeItem('virtuel_v23_trades');majJournal();}}
-function copierTicket(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}navigator.clipboard.writeText(dernierTicketText).then(()=>alert("Copié !\n"+dernierTicketText));}
-function onFileChange(e){
+let imgData=null;
+document.getElementById('file').onchange=e=>{
   let f=e.target.files[0]; if(!f) return;
-  document.getElementById('btnReanalyse').style.display='block';
-  document.getElementById('autoBox').style.display='block';
-  document.getElementById('barBox').style.display='block';
-  document.getElementById('ticketBox').style.display='none';
-  document.getElementById('btnCopy').style.display='none';
-  document.getElementById('manuelBox').style.display='none';
-  document.getElementById('autoText').innerText='⚡ BAM... Je lis ta capture...';
-  document.getElementById('barFill').style.width='30%';
   let r=new FileReader();
-  r.onload=function(ev){ derniereImageData=ev.target.result; let p=document.getElementById('preview'); p.src=ev.target.result; p.style.display='block'; lireEtBamm(ev.target.result); };
+  r.onload=ev=>{ imgData=ev.target.result; let p=document.getElementById('preview'); p.src=imgData; p.style.display='block'; document.getElementById('msg').innerText='✅ Capture prête. Clique ANALYSER.'; };
   r.readAsDataURL(f);
-}
-function relireCapture(){ if(!derniereImageData){alert("Mets d'abord ta capture !");return;} lireEtBamm(derniereImageData); }
-function agrandirImage(imgData){
-  return new Promise((resolve)=>{
-    let img=new Image();
-    img.onload=function(){ let canvas=document.createElement('canvas'); let scale=2; canvas.width=img.width*scale; canvas.height=img.height*scale; let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height); resolve(canvas.toDataURL('image/jpeg',0.9)); };
-    img.src=imgData;
-  });
-}
-function corrigerNom(nomBrut){
-  let b=nomBrut.toLowerCase().trim();
-  let dico=[["manchester red","Manchester Red"],["man red","Manchester Red"],["manchester blue","Manchester Blue"],["man blue","Manchester Blue"],["london reds","London Reds"],["london blues","London Blues"],["liverpool","Liverpool"],["spurs","Spurs"],["tottenham","Spurs"],["wolverhampton","Wolverhampton"],["wolves","Wolverhampton"],["everton","Everton"],["west ham","West Ham"],["aston villa","A. Villa"],["a. villa","A. Villa"],["leeds","Leeds"],["bournemouth","Bournemouth"],["burnley","Burnley"],["sunderland","Sunderland"],["brighton","Brighton"],["crystal palace","C. Palace"],["c. palace","C. Palace"],["fulham","Fulham"],["newcastle","Newcastle"],["nottingham","N. Forest"],["n. forest","N. Forest"],["brentford","Brentford"],["chelsea","Chelsea"],["arsenal","Arsenal"]];
-  for(let d of dico){ if(b.includes(d[0])) return d[1]; }
+};
+
+function nomPropre(n){
+  n=n.toLowerCase();
+  if(n.includes('manchester red')||n.includes('man red')) return 'Manchester Red';
+  if(n.includes('manchester blue')||n.includes('man blue')) return 'Manchester Blue';
+  if(n.includes('london reds')) return 'London Reds';
+  if(n.includes('london blues')) return 'London Blues';
+  if(n.includes('liverpool')) return 'Liverpool';
+  if(n.includes('spurs')||n.includes('tottenham')) return 'Spurs';
+  if(n.includes('wolverhampton')||n.includes('wolves')) return 'Wolverhampton';
+  if(n.includes('everton')) return 'Everton';
+  if(n.includes('west ham')) return 'West Ham';
+  if(n.includes('aston villa')||n.includes('a. villa')) return 'A. Villa';
+  if(n.includes('leeds')) return 'Leeds';
+  if(n.includes('bournemouth')) return 'Bournemouth';
+  if(n.includes('burnley')) return 'Burnley';
+  if(n.includes('sunderland')) return 'Sunderland';
+  if(n.includes('brighton')) return 'Brighton';
+  if(n.includes('crystal')||n.includes('c. palace')) return 'C. Palace';
+  if(n.includes('fulham')) return 'Fulham';
+  if(n.includes('newcastle')) return 'Newcastle';
+  if(n.includes('nottingham')||n.includes('n. forest')) return 'N. Forest';
+  if(n.includes('brentford')) return 'Brentford';
+  if(n.includes('chelsea')) return 'Chelsea';
+  if(n.includes('arsenal')) return 'Arsenal';
   return null;
 }
-async function lireEtBamm(imgData){
+
+async function analyser(){
+  if(!imgData){ alert('Mets d\'abord ta capture !'); return; }
+  let btn=document.getElementById('btn'); btn.disabled=true; btn.innerText='⏳ JE LIS...';
+  document.getElementById('msg').innerText='Je lis ta capture, attends 5 secondes...';
+  document.getElementById('res').style.display='none';
+
   try{
-    document.getElementById('barFill').style.width='60%';
-    let grand=await agrandirImage(imgData);
-    let form=new FormData(); form.append("base64Image", grand); form.append("language","eng"); form.append("isOverlayRequired","true"); form.append("scale","true"); form.append("OCREngine","2");
-    let resp=await fetch("https://api.ocr.space/parse/image",{method:"POST",headers:{"apikey":"helloworld"},body:form});
-    let data=await resp.json();
-    let parsed=data && data.ParsedResults && data.ParsedResults[0] ? data.ParsedResults[0] : null;
-    let texte=parsed? parsed.ParsedText||"" : "";
-    document.getElementById('barFill').style.width='85%';
-    document.getElementById('texteLu').style.display='block';
-    document.getElementById('texteLu').innerText="Texte lu : "+texte;
-    // On extrait noms + cotes dans l'ordre
-    let cotes=(texte.match(/\d[.,]\d{2}/g)||[]).map(n=>parseFloat(n.replace(',','.'))).filter(v=>v>=1.01 && v<=20);
-    let bas=texte.toLowerCase();
-    let dicoNoms=["manchester red","manchester blue","london reds","london blues","liverpool","spurs","tottenham","wolverhampton","wolves","everton","west ham","aston villa","a. villa","leeds","bournemouth","burnley","sunderland","brighton","crystal palace","c. palace","fulham","newcastle","nottingham","n. forest","brentford","chelsea","arsenal","man red","man blue"];
-    let positions=[]; dicoNoms.forEach(nom=>{ let start=0; while(true){ let idx=bas.indexOf(nom,start); if(idx===-1) break; positions.push({pos:idx,nom:corrigerNom(nom)}); start=idx+1; } });
-    positions.sort((a,b)=>a.pos-b.pos);
-    let noms=[]; positions.forEach(p=>{ if(!noms.some(n=>Math.abs(n.pos-p.pos)<6)) noms.push(p); });
-    let tableau=[];
-    let nb=Math.min(Math.floor(noms.length/2), Math.floor(cotes.length/3));
-    for(let i=0;i<nb;i++){ if(noms[i*2].nom===noms[i*2+1].nom) continue; tableau.push({nom:noms[i*2].nom+" vs "+noms[i*2+1].nom,c1:cotes[i*3],cX:cotes[i*3+1],c2:cotes[i*3+2]}); }
-    if(tableau.length>=1){
-      document.getElementById('barFill').style.width='100%';
-      document.getElementById('autoText').innerText=`✅ BAM ! ${tableau.length} matchs lus.`;
-      setTimeout(()=>{ document.getElementById('barBox').style.display='none'; },500);
-      genererTicketBamm(tableau);
-    } else {
-      // Si la capture donne 0 cotes, on affiche le secours manuel, mais le résultat sera EXACTEMENT comme V12
-      document.getElementById('autoText').innerText=`⚠️ Capture illisible : ${noms.length} noms, ${cotes.length} cotes. Tape les 3 cotes ci-dessous, tu auras le même résultat que V12.`;
-      document.getElementById('manuelBox').style.display='block';
-      document.getElementById('barBox').style.display='none';
-    }
-  }catch(e){ document.getElementById('autoText').innerText='⚠️ Pas de connexion. Tape les cotes ci-dessous, tu auras le même résultat.'; document.getElementById('manuelBox').style.display='block'; document.getElementById('barBox').style.display='none'; }
-}
-function ajouterManuel(){
-  let dom=domSel.value, ext=extSel.value;
-  let c1=parseFloat(document.getElementById('c1Input').value), cx=parseFloat(document.getElementById('cxInput').value), c2=parseFloat(document.getElementById('c2Input').value);
-  if(!c1||!cx||!c2){ alert("Tape les 3 cotes ! Ex : 1.45 / 4.79 / 6.27"); return; }
-  tableauManuel.push({nom:dom+" vs "+ext,c1:c1,cX:cx,c2:c2});
-  document.getElementById('listeManuel').innerHTML=tableauManuel.map(t=>`• ${t.nom} - ${t.c1} / ${t.cX} / ${t.c2}`).join("<br>");
-  document.getElementById('c1Input').value=""; document.getElementById('cxInput').value=""; document.getElementById('c2Input').value="";
-  genererTicketBamm(tableauManuel);
-}
-// AFFICHAGE EXACTEMENT COMME TA PHOTO V12
-function genererTicketBamm(tableau){
-  dernierTableau=tableau;
-  let analyses=[];
-  tableau.forEach((m)=>{
-    let c1=m.c1,cX=m.cX,c2=m.c2;
-    let p1r=1/c1,pXr=1/cX,p2r=1/c2,s=p1r+pXr+p2r;
-    let p1=Math.round(p1r/s*100),pX=Math.round(pXr/s*100),p2=Math.round(p2r/s*100);
-    let maxP=Math.max(p1,pX,p2);
-    let favori=p1===maxP?"1":(p2===maxP?"2":"X");
-    let coteFav=favori==="1"?c1:(favori==="2"?c2:cX);
-    let parties=m.nom.split(" vs "); let nomDom=parties[0]||"Domicile",nomExt=parties[1]||"Extérieur";
-    let nomFav=favori==="1"?nomDom:nomExt;
-    let confiance=maxP,risque=100-maxP;
-    let choix="",coteChoix=0,probaChoix=0,type="",avert="";
-    if(coteFav<1.35){ choix=`⚠️ PIÈGE - Ne joue PAS ${nomFav} seul @ ${coteFav}`; type="PIEGE"; probaChoix=maxP; avert=`Risque ${risque}%`; }
-    else if(coteFav<=2.10){ choix=`Victoire ${nomFav} - SEC`; coteChoix=coteFav; probaChoix=maxP; type="SEC"; avert=`Risque ${risque}%`; }
-    else { let coteDC=1/((maxP+pX)/100); choix=`Double Chance ${nomFav} ou Nul`; coteChoix=Math.round(coteDC*100)/100; probaChoix=maxP+pX; type="DC"; avert=`Risque ${100-probaChoix}%`; }
-    analyses.push({nom:m.nom,c1,cX,c2,p1,pX,p2,favori,coteFav,confiance,risque,choix,coteChoix,probaChoix,type,avertissement:avert});
-  });
-  let bons=analyses.filter(a=>a.type!=="PIEGE").sort((a,b)=>b.confiance-a.confiance);
-  let top3=bons.slice(0,3);
-  let pieges=analyses.filter(a=>a.type==="PIEGE");
-  let coteTotale=1; top3.forEach(a=>coteTotale*=a.coteChoix); coteTotale=Math.round(coteTotale*100)/100;
-  let gain=Math.round(miseDefaut*coteTotale);
-  let chanceCombinee=1; top3.forEach(a=>chanceCombinee*=(a.probaChoix/100)); chanceCombinee=Math.round(chanceCombinee*100);
-  document.getElementById('ticketBox').style.display='block';
-  document.getElementById('btnCopy').style.display='block';
-  document.getElementById('ticketList').innerHTML=top3.map((a,i)=>`<div class="ticket-row"><b>${i+1}. ${a.nom}</b><br><span class="proba">Proba 1:${a.p1}% X:${a.pX}% 2:${a.p2}% - ${a.c1} / ${a.cX} / ${a.c2}</span><br><span>${a.choix} @ ${a.coteChoix}</span><br><span class="risque">⚠️ ${a.avertissement}</span></div>`).join("") + (pieges.length?`<div class="ticket-row" style="border:1px solid #ff1744"><b>🚫 PIÈGES :</b><br>${pieges.map(p=>`${p.nom} @ ${p.coteFav}`).join("<br>")}</div>`:"");
-  document.getElementById('coteTotale').innerText="x "+coteTotale;
-  document.getElementById('gainPotentiel').innerText=`Mise ${miseDefaut} MGA → Gain ${gain} MGA`;
-  document.getElementById('chanceCombinee').innerText=`🎯 Chance de gagner les 3 : ${chanceCombinee}%`;
-  document.getElementById('ticketDetail').innerHTML=`<b>📊 Confiance = vraie proba.</b><br>${top3.map(a=>`• ${a.nom} : ${a.confiance}% - Risque ${a.risque}%`).join("<br>")}`;
-  document.getElementById('tousMatchs').innerHTML=`<b>✅ Tous les matchs avec NOMS :</b><br>${analyses.map(a=>`${a.type==="PIEGE"?"🚫":a.confiance>=55?"🟢":"🟡"} ${a.nom} - ${a.choix}`).join("<br>")}`;
-  document.getElementById('autoText').innerHTML=`✅ <b>BAM ! Ticket prêt comme V12.</b> Cote x${coteTotale} - Chance ${chanceCombinee}%`;
-  dernierTicketText=`TICKET V12 - Cote x${coteTotale} - Gain ${gain} MGA - Chance ${chanceCombinee}%\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix}`).join("\n")}`;
-  if(navigator.vibrate) navigator.vibrate([100,50,100]);
-  document.getElementById('ticketBox').scrollIntoView({behavior:'smooth',block:'start'});
+    // On agrandit x2 pour mieux lire
+    let img=new Image();
+    img.onload=async ()=>{
+      let c=document.createElement('canvas'); c.width=img.width*2; c.height=img.height*2;
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      let grand=c.toDataURL('image/jpeg',0.9);
+
+      // On essaie 3 fois si le serveur est occupé
+      let texte='';
+      for(let essai=0; essai<3; essai++){
+        try{
+          let f=new FormData();
+          f.append('base64Image',grand); f.append('language','eng'); f.append('scale','true'); f.append('OCREngine','2');
+          let r=await fetch('https://api.ocr.space/parse/image',{method:'POST',headers:{'apikey':'helloworld'},body:f});
+          let d=await r.json();
+          texte=d?.ParsedResults?.[0]?.ParsedText||'';
+          if(texte.length>20) break;
+        }catch(e){}
+      }
+
+      if(!texte || texte.length<20){
+        document.getElementById('msg').innerHTML='⚠️ Serveur occupé. Coupe ta capture plus serrée, juste les lignes vertes, et reclique ANALYSER.';
+        btn.disabled=false; btn.innerText='🔍 ANALYSER'; return;
+      }
+
+      // Cotes dans l'ordre
+      let cotes=(texte.match(/\d[.,]\d{2}/g)||[]).map(x=>parseFloat(x.replace(',','.'))).filter(v=>v>=1.01&&v<=20);
+      // Noms dans l'ordre
+      let bas=texte.toLowerCase();
+      let listeNoms=['manchester red','manchester blue','london reds','london blues','liverpool','spurs','tottenham','wolverhampton','wolves','everton','west ham','aston villa','a. villa','leeds','bournemouth','burnley','sunderland','brighton','crystal palace','c. palace','fulham','newcastle','nottingham','n. forest','brentford','chelsea','arsenal','man red','man blue'];
+      let pos=[]; listeNoms.forEach(nom=>{ let s=0; while(true){ let i=bas.indexOf(nom,s); if(i===-1) break; pos.push({p:i,n:nomPropre(nom)}); s=i+1; } });
+      pos.sort((a,b)=>a.p-b.p);
+      let noms=[]; pos.forEach(x=>{ if(!noms.some(y=>Math.abs(y.p-x.p)<6)) noms.push(x); });
+
+      let matchs=[];
+      let nb=Math.min(Math.floor(noms.length/2), Math.floor(cotes.length/3));
+      for(let i=0;i<nb;i++){
+        let d=noms[i*2].n, e=noms[i*2+1].n;
+        if(d===e) continue;
+        matchs.push({nom:d+' vs '+e, c1:cotes[i*3], cx:cotes[i*3+1], c2:cotes[i*3+2]});
+      }
+
+      if(matchs.length===0){
+        document.getElementById('msg').innerHTML='⚠️ Je n\'ai rien lu. Coupe plus serrée, juste les lignes vertes, et reclique.';
+        btn.disabled=false; btn.innerText='🔍 ANALYSER'; return;
+      }
+
+      // On calcule qui gagne + % gagne / % perd
+      let analyses=matchs.map(m=>{
+        let s=1/m.c1+1/m.cx+1/m.c2;
+        let p1=Math.round(1/m.c1/s*100), px=Math.round(1/m.cx/s*100), p2=Math.round(1/m.c2/s*100);
+        let max=Math.max(p1,px,p2);
+        let parties=m.nom.split(' vs ');
+        let gagnant = p1===max ? parties[0] : p2===max ? parties[1] : 'Match Nul';
+        let coteGagnant = p1===max ? m.c1 : p2===max ? m.c2 : m.cx;
+        // Si cote trop basse = piège, on saute
+        let piege = coteGagnant < 1.35;
+        return {...m, p1, px, p2, gagnant, coteGagnant, chance:max, risque:100-max, piege};
+      });
+
+      // On choisit les 3 meilleurs, sans les pièges
+      let top3=analyses.filter(a=>!a.piege).sort((a,b)=>b.chance-a.chance).slice(0,3);
+      if(top3.length===0) top3=analyses.slice(0,3);
+
+      let coteTot=1; top3.forEach(a=>coteTot*=a.coteGagnant); coteTot=Math.round(coteTot*100)/100;
+      let chanceTot=1; top3.forEach(a=>chanceTot*=a.chance/100); chanceTot=Math.round(chanceTot*100);
+
+      document.getElementById('liste').innerHTML=top3.map((a,i)=>`
+        <div class="m">
+          <b>${i+1}. ${a.nom}</b><br>
+          <span style="color:#aaa;font-size:12px">${a.c1} / ${a.cx} / ${a.c2} - Proba 1:${a.p1}% X:${a.px}% 2:${a.p2}%</span>
+          <span class="win">✅ ${a.gagnant} gagne @ ${a.coteGagnant}</span>
+          <div class="bar"><div class="fill" style="width:${a.chance}%"></div></div>
+          <span style="color:#00ff88;font-weight:900">🟢 ${a.chance}% de gagner</span>
+          <span class="lose">🔴 ${a.risque}% de perdre</span>
+        </div>`).join('');
+
+      document.getElementById('coteTot').innerText='x '+coteTot;
+      document.getElementById('gain').innerText='Mise 5000 MGA → Gain '+Math.round(5000*coteTot)+' MGA - Chance les 3 : '+chanceTot+'% - Risque : '+(100-chanceTot)+'%';
+      document.getElementById('res').style.display='block';
+      document.getElementById('msg').innerText='✅ Voilà tes 3 matchs.';
+      btn.disabled=false; btn.innerText='🔍 ANALYSER';
+      document.getElementById('res').scrollIntoView({behavior:'smooth'});
+    };
+    img.src=imgData;
+  }catch(e){
+    document.getElementById('msg').innerText='⚠️ Erreur. Vérifie ta 4G et reclique.';
+    btn.disabled=false; btn.innerText='🔍 ANALYSER';
+  }
 }
 </script>
 </body>
