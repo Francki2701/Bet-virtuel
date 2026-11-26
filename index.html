@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>V17 - 3 MATCHS HONNETES</title>
+<title>V18 - 3 MATCHS - LECTURE BET261</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#000;color:#fff;font-family:Arial;padding:0;padding-bottom:20px}
@@ -44,9 +44,8 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 </head>
 <body>
 <div class="top">
-<h1>⚡ VIRTUEL V17 - 3 MATCHS</h1>
-<p>ON NE DIT PLUS "GAGNE" - ON DIT "PLUS DE CHANCES"</p>
-<p style="color:#fff;font-size:10px">68% = 32% de chance que ça perde. Comme A. Villa 0-1 N. Forest.</p>
+<h1>⚡ VIRTUEL V18 - 3 MATCHS</h1>
+<p>LECTURE BET261 : NOMS EMPILÉS - ON NE DIT PLUS "GAGNE"</p>
 </div>
 <div class="card">
 <label>📸 TA CAPTURE BET261 - 3 MATCHS OU PLUS</label>
@@ -54,14 +53,12 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 <img id="preview" class="preview">
 <button class="btn-reanalyse" id="btnReanalyse" onclick="relireCapture()">🔄 RE-ANALYSER</button>
 <div class="status" id="autoBox"><b>🤖 <span id="autoText">Prêt ! Envoie ta capture.</span></b><div class="small" id="texteLu" style="text-align:left;display:none"></div></div>
-
 <div class="verif" id="verifBox">
 <b>👀 J'ai lu ces matchs, c'est bien ça ?</b><br>
 <div id="verifListe" style="margin-top:8px;text-align:left;font-size:13px;line-height:1.8"></div>
 <button class="btn-oui" onclick="confirmerOui()">✅ OUI, C'EST ÇA</button>
 <button class="btn-non" onclick="confirmerNon()">❌ NON</button>
 </div>
-
 <div class="ticket" id="ticketBox">
 <h3>🎫 TON TICKET - 3 MATCHS - HONNÊTE</h3>
 <div id="ticketList"></div>
@@ -81,15 +78,15 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 <button class="btn-effacer" onclick="effacerJournal()">🗑️ Effacer</button>
 <p class="small" id="listeTrades" style="margin-top:10px;text-align:left">Aucun pari.</p>
 </div>
-<p class="small">V17 = 3 matchs, avec noms, avec vérification, et on ne dit plus "GAGNE" comme si c'était sûr.<br>On dit "Plus de chances" + le risque. Virtuel = Hasard.<br>18+ Joue responsable.</p>
+<p class="small">V18 = Lecture pour Bet261 : 1 équipe en haut, 1 équipe en bas, cotes au milieu.<br>On ne dit plus "GAGNE". On dit "Plus de chances" + risque.<br>18+ Joue responsable.</p>
 <script>
 let derniereImageData=null, dernierTicketText="", miseDefaut=5000, dernierTableau=null, tableauEnAttente=null;
-let trades=JSON.parse(localStorage.getItem('virtuel_v17_trades')||"[]");
+let trades=JSON.parse(localStorage.getItem('virtuel_v18_trades')||"[]");
 function changerMise(){ let v=parseInt(document.getElementById('miseInput').value); if(v&&v>0){ miseDefaut=v; if(dernierTableau) genererTicketBamm(dernierTableau); } }
 function majJournal(){let t=trades.length;let w=trades.filter(x=>x.res==="WIN").length;let wr=t?Math.round(w/t*100):0;document.getElementById('totalTrades').innerText=t;document.getElementById('winRate').innerText=wr+"%";document.getElementById('listeTrades').innerHTML=t?trades.slice(-5).reverse().map(x=>`${x.pari} - ${x.res}`).join("<br>"):"Aucun pari.";}
 majJournal();
-function validerResultat(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}let res=document.getElementById('resultat').value;trades.push({pari:dernierTicketText,res:res});localStorage.setItem('virtuel_v17_trades',JSON.stringify(trades));majJournal();alert("Validé : "+res);}
-function effacerJournal(){if(confirm("Effacer ?")){trades=[];localStorage.removeItem('virtuel_v17_trades');majJournal();}}
+function validerResultat(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}let res=document.getElementById('resultat').value;trades.push({pari:dernierTicketText,res:res});localStorage.setItem('virtuel_v18_trades',JSON.stringify(trades));majJournal();alert("Validé : "+res);}
+function effacerJournal(){if(confirm("Effacer ?")){trades=[];localStorage.removeItem('virtuel_v18_trades');majJournal();}}
 function copierTicket(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}navigator.clipboard.writeText(dernierTicketText).then(()=>alert("Copié !\n"+dernierTicketText));}
 function onFileChange(e){
   let f=e.target.files[0]; if(!f) return;
@@ -98,7 +95,7 @@ function onFileChange(e){
   document.getElementById('ticketBox').style.display='none';
   document.getElementById('verifBox').style.display='none';
   document.getElementById('btnCopy').style.display='none';
-  document.getElementById('autoText').innerText='⚡ Je lis ligne par ligne, avec les noms...';
+  document.getElementById('autoText').innerText='⚡ Je lis... Noms en haut / en bas + cotes...';
   let r=new FileReader();
   r.onload=function(ev){ derniereImageData=ev.target.result; let p=document.getElementById('preview'); p.src=ev.target.result; p.style.display='block'; lireEtBamm(ev.target.result); };
   r.readAsDataURL(f);
@@ -126,40 +123,53 @@ async function lireEtBamm(imgData){
     let parsed=data && data.ParsedResults && data.ParsedResults[0] ? data.ParsedResults[0] : null;
     let texte=parsed? parsed.ParsedText||"" : "";
     let lignesOverlay=parsed && parsed.TextOverlay && parsed.TextOverlay.Lines ? parsed.TextOverlay.Lines : [];
-    let lignes=[];
-    lignesOverlay.forEach(l=>{
-      let y=l.MinTop||0; let mots=l.Words.map(w=>w.WordText).join(" ");
-      let exist=lignes.find(x=>Math.abs(x.y-y)<14);
-      if(exist) exist.texte+=" "+mots;
-      else lignes.push({y:y,texte:mots});
-    });
-    lignes.sort((a,b)=>a.y-b.y);
+    // ⭐ V18 : On ne cherche PLUS 2 équipes sur la même ligne. On prend TOUT, dans l'ordre de haut en bas.
+    // 1. On récupère tous les mots avec leur position Y
+    let motsAvecY=[];
+    lignesOverlay.forEach(l=>{ l.Words.forEach(w=>{ motsAvecY.push({mot:w.WordText, y:l.MinTop||0, x:w.MinLeft||0}); }); });
+    // Si overlay vide, on retombe sur le texte brut
+    if(motsAvecY.length===0){
+      let lignesTexte=texte.split("\n").filter(s=>s.trim());
+      lignesTexte.forEach((t,i)=>{ motsAvecY.push({mot:t, y:i*30, x:0}); });
+    }
+    motsAvecY.sort((a,b)=>a.y-b.y);
+    // 2. On reconstruit le texte dans l'ordre de haut en bas
+    let texteOrdonne=motsAvecY.map(m=>m.mot).join(" ");
+    document.getElementById('texteLu').style.display='block';
+    document.getElementById('texteLu').innerText="Texte lu dans l'ordre : "+texteOrdonne;
+    // 3. On extrait les COTES dans l'ordre de haut en bas (elles sont à droite, mais leur Y donne l'ordre)
+    // On prend les cotes depuis le texte ordonné, mais pour être sûr on les prend aussi depuis le texte brut et on les trie par apparition
+    let cotesBrutes=texteOrdonne.match(/\d[.,]\d{2}/g)||[];
+    let cotes=cotesBrutes.map(n=>parseFloat(n.replace(',','.'))).filter(v=>v>=1.01 && v<=20);
+    // On enlève les doublons consécutifs (ex: 7,13 qui apparaît 2 fois dans 2 matchs, on le garde, mais pas 2 fois d'affilée à cause de l'overlay)
+    let cotesPropres=[]; cotes.forEach(v=>{ if(!cotesPropres.length || Math.abs(v-cotesPropres[cotesPropres.length-1])>0.001 || cotesPropres.length%3!==0) cotesPropres.push(v); });
+    // En fait, pour les cotes, on utilise la méthode simple : toutes les cotes du texte brut dans l'ordre
+    let cotes2=(texte.match(/\d[.,]\d{2}/g)||[]).map(n=>parseFloat(n.replace(',','.'))).filter(v=>v>=1.01 && v<=20);
+    // On choisit la liste la plus longue qui est multiple de 3
+    if(cotes2.length>=cotes.length && cotes2.length%3===0) cotes=cotes2;
+    // 4. On extrait les NOMS dans l'ordre de haut en bas, depuis le texte ordonné
+    let bas=texteOrdonne.toLowerCase();
+    let dicoNoms=["manchester red","manchester blue","london reds","london blues","liverpool","spurs","tottenham","wolverhampton","wolves","everton","west ham","aston villa","a. villa","leeds","bournemouth","burnley","sunderland","brighton","crystal palace","c. palace","fulham","newcastle","nottingham","n. forest","brentford","chelsea","arsenal","man red","man blue"];
+    let positions=[]; dicoNoms.forEach(nom=>{ let start=0; while(true){ let idx=bas.indexOf(nom,start); if(idx===-1) break; positions.push({pos:idx,nom:corrigerNom(nom),long:nom.length}); start=idx+1; } });
+    positions.sort((a,b)=>a.pos-b.pos);
+    // On enlève les doublons qui se chevauchent (ex: "man red" dans "manchester red", "a. villa" dans "aston villa")
+    let noms=[];
+    positions.forEach(p=>{ let chevauche=noms.some(n=>Math.abs(n.pos-p.pos)<6); if(!chevauche) noms.push(p); });
+    // 5. On fait les matchs : Nom 1 + Nom 2 = Match 1, Cotes 1-2-3 = Match 1
     let tableau=[];
-    lignes.forEach(l=>{
-      let cotes=(l.texte.match(/\d[.,]\d{2}/g)||[]).map(n=>parseFloat(n.replace(',','.'))).filter(v=>v>=1.01 && v<=20);
-      if(cotes.length<3) return;
-      let bas=l.texte.toLowerCase();
-      let dicoNoms=["manchester red","manchester blue","london reds","london blues","liverpool","spurs","tottenham","wolverhampton","wolves","everton","west ham","aston villa","a. villa","leeds","bournemouth","burnley","sunderland","brighton","crystal palace","c. palace","fulham","newcastle","nottingham","n. forest","brentford","chelsea","arsenal","man red","man blue"];
-      let positions=[]; dicoNoms.forEach(nom=>{ let idx=bas.indexOf(nom); if(idx!==-1) positions.push({pos:idx,nom:corrigerNom(nom)}); });
-      positions.sort((a,b)=>a.pos-b.pos);
-      let fil=[]; positions.forEach(p=>{ if(!fil.some(f=>Math.abs(f.pos-p.pos)<4)) fil.push(p); });
-      if(fil.length>=2 && fil[0].nom!==fil[1].nom){ tableau.push({nom:fil[0].nom+" vs "+fil[1].nom,c1:cotes[0],cX:cotes[1],c2:cotes[2]}); }
-    });
-    if(tableau.length<2){
-      let nombres=texte.match(/\d[.,]\d{2}/g)||[];
-      let cotes=nombres.map(n=>parseFloat(n.replace(',','.'))).filter(v=>v>=1.01 && v<=20);
-      let cotesPropres=[]; cotes.forEach(v=>{ if(!cotesPropres.length || Math.abs(v-cotesPropres[cotesPropres.length-1])>0.01) cotesPropres.push(v); });
-      for(let i=0;i<Math.floor(cotesPropres.length/3);i++){ tableau.push({nom:"Match "+(i+1),c1:cotesPropres[i*3],cX:cotesPropres[i*3+1],c2:cotesPropres[i*3+2]}); }
+    let nbMatchs=Math.min(Math.floor(noms.length/2), Math.floor(cotes.length/3));
+    for(let i=0;i<nbMatchs;i++){
+      let dom=noms[i*2].nom, ext=noms[i*2+1].nom;
+      if(dom===ext) continue;
+      tableau.push({nom:dom+" vs "+ext,c1:cotes[i*3],cX:cotes[i*3+1],c2:cotes[i*3+2]});
     }
     if(tableau.length>=1){
       tableauEnAttente=tableau;
       document.getElementById('verifBox').style.display='block';
       document.getElementById('verifListe').innerHTML=tableau.map(t=>`• ${t.nom} - ${t.c1} / ${t.cX} / ${t.c2}`).join("<br>");
       document.getElementById('autoText').innerText=`👀 J'ai lu ${tableau.length} matchs. Vérifie si les noms sont bons, clique OUI ou NON.`;
-      document.getElementById('texteLu').style.display='block';
-      document.getElementById('texteLu').innerText="Lignes lues : "+lignes.map(l=>l.texte).join(" | ");
     } else {
-      document.getElementById('autoText').innerText=`⚠️ J'ai lu ${tableau.length} match. Coupe juste les lignes vertes, sans l'heure.`;
+      document.getElementById('autoText').innerText=`⚠️ J'ai lu ${noms.length} noms et ${cotes.length} cotes. Reprends ta capture plus serrée, juste les lignes vertes. Noms lus : ${noms.map(n=>n.nom).join(", ")}`;
     }
   }catch(e){ document.getElementById('autoText').innerText='⚠️ Pas de connexion. Vérifie ta 4G.'; }
 }
@@ -179,7 +189,7 @@ function genererTicketBamm(tableau){
     let nomFav=favori==="1"?nomDom:(favori==="2"?nomExt:"Match Nul");
     let confiance=maxP,risque=100-maxP;
     let choix="",coteChoix=0,probaChoix=0,type="",texteHonnete="";
-    if(coteFav<1.35){ choix=`⚠️ PIÈGE - Ne joue PAS ${nomFav} seul`; type="PIEGE"; probaChoix=maxP; texteHonnete=`${nomFav} a ${maxP}% - Mais ${risque}% de chance que ça perde, comme A. Villa 1.39 qui a perdu 0-1. Ne mets pas gros.`; }
+    if(coteFav<1.35){ choix=`⚠️ PIÈGE - Ne joue PAS ${nomFav} seul`; type="PIEGE"; probaChoix=maxP; texteHonnete=`${nomFav} a ${maxP}% - Mais ${risque}% de chance que ça perde, comme A. Villa 1.39 qui a perdu 0-1.`; }
     else if(coteFav<=2.10){ choix=`Plus de chances : ${nomFav}`; coteChoix=coteFav; probaChoix=maxP; type="SEC"; texteHonnete=`${nomFav} a ${maxP}% - Mais ${risque}% de chance que ça perde. Ce n'est pas sûr.`; }
     else { let coteDC=1/((maxP+pX)/100); choix=`Plus de chances : ${nomFav} ou Nul`; coteChoix=Math.round(coteDC*100)/100; probaChoix=maxP+pX; type="DC"; texteHonnete=`${nomFav} ou Nul a ${probaChoix}% - Risque ${100-probaChoix}% que l'autre gagne.`; }
     analyses.push({nom:m.nom,c1,cX,c2,p1,pX,p2,favori,coteFav,confiance,risque,choix,coteChoix,probaChoix,type,texteHonnete,nomFav});
@@ -192,14 +202,14 @@ function genererTicketBamm(tableau){
   let chanceCombinee=1; top3.forEach(a=>chanceCombinee*=(a.probaChoix/100)); chanceCombinee=Math.round(chanceCombinee*100);
   document.getElementById('ticketBox').style.display='block';
   document.getElementById('btnCopy').style.display='block';
-  document.getElementById('ticketList').innerHTML=top3.map((a,i)=>`<div class="ticket-row"><b>${i+1}. ${a.nom}</b><br><span style="color:#aaa;font-size:11px">${a.nom} - ${a.c1} / ${a.cX} / ${a.c2}</span><br><span class="favori">${a.choix} @ ${a.coteChoix}</span><div class="proba-bar"><div class="proba-fill" style="width:${a.probaChoix}%"></div></div><span style="font-size:13px">Chance : ${a.probaChoix}%</span><br><span class="risque">⚠️ Risque que ça perde : ${100-a.probaChoix}%</span><br><span style="font-size:12px;color:#aaa">${a.texteHonnete}</span></div>`).join("") + (pieges.length?`<div class="ticket-row" style="border:1px solid #ff1744"><b>🚫 PIÈGES - Ne joue pas seul :</b><br>${pieges.map(p=>`${p.nom} - ${p.nomFav} a ${p.confiance}% mais risque ${p.risque}%`).join("<br>")}</div>`:"");
+  document.getElementById('ticketList').innerHTML=top3.map((a,i)=>`<div class="ticket-row"><b>${i+1}. ${a.nom}</b><br><span style="color:#aaa;font-size:11px">${a.c1} / ${a.cX} / ${a.c2}</span><br><span class="favori">${a.choix} @ ${a.coteChoix}</span><div class="proba-bar"><div class="proba-fill" style="width:${a.probaChoix}%"></div></div><span style="font-size:13px">Chance : ${a.probaChoix}%</span><br><span class="risque">⚠️ Risque que ça perde : ${100-a.probaChoix}%</span><br><span style="font-size:12px;color:#aaa">${a.texteHonnete}</span></div>`).join("") + (pieges.length?`<div class="ticket-row" style="border:1px solid #ff1744"><b>🚫 PIÈGES - Ne joue pas seul :</b><br>${pieges.map(p=>`${p.nom} - ${p.nomFav} a ${p.confiance}% mais risque ${p.risque}%`).join("<br>")}</div>`:"");
   document.getElementById('coteTotale').innerText="x "+coteTotale;
   document.getElementById('gainPotentiel').innerText=`Mise ${miseDefaut} MGA → Gain ${gain} MGA`;
   document.getElementById('chanceCombinee').innerText=`🎯 Chance de gagner les 3 ensemble : ${chanceCombinee}% - Donc ${100-chanceCombinee}% de chance que ça perde`;
-  document.getElementById('ticketDetail').innerHTML=`<b>📊 Honnête :</b><br>${top3.map(a=>`• ${a.nom} : ${a.nomFav} a ${a.probaChoix}% - Risque ${100-a.probaChoix}%`).join("<br>")}<br><br>Exemple : A. Villa avait 68%, elle a quand même perdu 0-1. 68% ≠ 100%.`;
+  document.getElementById('ticketDetail').innerHTML=`<b>📊 Honnête :</b><br>${top3.map(a=>`• ${a.nom} : ${a.nomFav} a ${a.probaChoix}% - Risque ${100-a.probaChoix}%`).join("<br>")}`;
   document.getElementById('tousMatchs').innerHTML=`<b>✅ Tous les matchs avec NOMS :</b><br>${analyses.map(a=>`${a.type==="PIEGE"?"🚫":a.confiance>=55?"🟢":"🟡"} ${a.nom} - ${a.choix} - Chance ${a.probaChoix}% - Risque ${100-a.probaChoix}%`).join("<br>")}`;
   document.getElementById('autoText').innerHTML=`✅ <b>Ticket 3 matchs prêt, avec les risques.</b> Cote x${coteTotale} - Chance ${chanceCombinee}%`;
-  dernierTicketText=`TICKET V17 - 3 MATCHS - Cote x${coteTotale} - Gain ${gain} MGA - Chance ${chanceCombinee}% - Risque ${100-chanceCombinee}%\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix} - Chance ${a.probaChoix}% - Risque ${100-a.probaChoix}%`).join("\n")}`;
+  dernierTicketText=`TICKET V18 - 3 MATCHS - Cote x${coteTotale} - Gain ${gain} MGA - Chance ${chanceCombinee}% - Risque ${100-chanceCombinee}%\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix} - Chance ${a.probaChoix}% - Risque ${100-a.probaChoix}%`).join("\n")}`;
   if(navigator.vibrate) navigator.vibrate([100,50,100]);
   document.getElementById('ticketBox').scrollIntoView({behavior:'smooth',block:'start'});
 }
