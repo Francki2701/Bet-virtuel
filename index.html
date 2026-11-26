@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>VIRTUEL V11 BAM - SANS CAPTURE</title>
+<title>VIRTUEL V12 CAPTURE BAM</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#000;color:#fff;font-family:Arial;padding:0;padding-bottom:20px}
@@ -13,14 +13,10 @@ body{margin:0;background:#000;color:#fff;font-family:Arial;padding:0;padding-bot
 .card{margin:12px;background:linear-gradient(180deg,#0a2a00,#0a0a0a);border:2px solid #00c853;border-radius:20px;padding:14px}
 label{font-size:13px;color:#ffcc00;font-weight:900;display:block;margin:10px 0 6px}
 input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;background:#111;color:#fff;font-size:15px}
-.match-box{background:#111;border:1px solid #333;border-radius:14px;padding:12px;margin-bottom:10px}
-.match-box b{color:#00ff88;font-size:14px}
-.row2{display:flex;gap:6px;margin-top:8px}
-.row2 select{flex:1}
-.row3{display:flex;gap:6px;margin-top:8px}
-.row3 input{flex:1;text-align:center;font-weight:900;font-size:16px;padding:12px}
-.row3 input::placeholder{font-weight:400;font-size:12px}
-.btn-bam{width:100%;background:#00ff88;color:#000;padding:18px;border:0;border-radius:14px;font-weight:900;font-size:22px;margin-top:10px}
+.preview{width:100%;border-radius:12px;margin-top:8px;display:none;border:1px solid #333;max-height:220px;object-fit:cover}
+.status{background:#111;border:1px solid #00ff88;border-radius:12px;padding:12px;font-size:13px;line-height:1.7;display:none;margin-top:10px}
+.bar{height:8px;background:#222;border-radius:10px;overflow:hidden;margin-top:8px;display:none}
+.bar div{height:100%;width:0%;background:#00ff88;transition:width .3s}
 .ticket{background:#001a0a;border:2px solid #00ff88;border-radius:16px;padding:14px;margin-top:12px;display:none}
 .ticket h3{margin:0 0 10px;color:#00ff88;font-size:16px}
 .ticket-row{background:#111;border-radius:12px;padding:12px;margin-bottom:8px}
@@ -33,6 +29,11 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 .conf-detail b{color:#ffcc00}
 .small{font-size:11px;color:#aaa;text-align:center;margin-top:8px;line-height:1.5}
 .btn-copy{width:100%;background:#ffcc00;color:#000;padding:14px;border:0;border-radius:12px;font-weight:900;font-size:16px;margin-top:8px}
+.btn-reanalyse{width:100%;background:#00c853;color:#fff;padding:13px;border:0;border-radius:12px;font-weight:900;font-size:15px;margin-top:8px;display:none}
+.link-manuel{font-size:12px;color:#ff9800;text-align:center;display:none;margin-top:10px;text-decoration:underline}
+.manuel-box{display:none;background:#111;border:1px solid #ff9800;border-radius:12px;padding:12px;margin-top:10px}
+.manuel-row{display:flex;gap:6px;margin-bottom:8px}
+.manuel-row input{flex:1;padding:10px;font-size:13px;text-align:center}
 .journal{margin:12px;background:#0a0a0a;border:2px solid #333;border-radius:20px;padding:14px}
 .journal h2{font-size:16px;margin:0 0 10px;color:#00ff88}
 .j-grid{display:flex;gap:8px}.j-grid>div{flex:1;background:#111;padding:12px;border-radius:12px;text-align:center}
@@ -43,26 +44,37 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 </head>
 <body>
 <div class="top">
-<h1>⚡ VIRTUEL V11 BAM</h1>
-<p>PAS DE CAPTURE - PAS D'ATTENTE - TU TAPES, BAM RÉSULTAT</p>
+<h1>⚡ VIRTUEL V12 CAPTURE BAM</h1>
+<p>CAPTURE → BAM → RÉSULTAT - TU NE TAPES RIEN</p>
 </div>
 
 <div class="card">
-<label>💰 TA MISE (MGA)</label>
-<input type="number" id="miseInput" value="5000" inputmode="numeric">
+<label>📸 1. TA CAPTURE BET261 - C'EST TOUT</label>
+<input type="file" id="fileInput" accept="image/*" onchange="onFileChange(event)">
+<img id="preview" class="preview">
+<button class="btn-reanalyse" id="btnReanalyse" onclick="relireCapture()">🔄 RE-ANALYSER MA CAPTURE</button>
 
-<div id="matchs"></div>
-
-<button class="btn-bam" onclick="genererBAM()">⚡ BAM - CALCULER MON TICKET</button>
+<div class="status" id="autoBox"><b>🤖 <span id="autoText">Prêt ! Envoie ta capture.</span></b><div class="bar" id="barBox"><div id="barFill"></div></div><div class="small" id="texteLu" style="text-align:left;display:none"></div></div>
 
 <div class="ticket" id="ticketBox">
 <h3>🎫 TON TICKET - TOP 3 BAM</h3>
 <div id="ticketList"></div>
 <div class="total-box">COTE COMBINÉE<br><span id="coteTotale">-</span><br><div style="font-size:14px" id="gainPotentiel">-</div><div style="font-size:12px;margin-top:6px" id="chanceCombinee"></div></div>
 <div class="conf-detail" id="ticketDetail"></div>
-<div class="conf-detail" id="tousMatchs"></div>
+<div class="conf-detail" id="nomsLus" style="border-color:#00ff88"></div>
 </div>
 <button class="btn-copy" id="btnCopy" style="display:none" onclick="copierTicket()">📋 COPIER MON TICKET</button>
+
+<div class="link-manuel" id="linkManuel" onclick="ouvrirManuel()">Ça n'a pas lu ? Clique ici, tape juste 1 ligne →</div>
+<div class="manuel-box" id="manuelBox">
+<b style="color:#ff9800">✍️ Secours ultra-rapide - Colle juste les cotes en 1 ligne :</b><br>
+<span class="small">Exemple : 1.38 4.54 8.60 / 1.73 4.37 3.94 / 1.85 3.92 3.77</span>
+<input id="ligneCotes" placeholder="Colle ici : 1.38 4.54 8.60 / 1.73 ..." style="margin-top:8px">
+<button class="btn-valider" onclick="genererDepuisLigne()">✅ CALCULER</button>
+</div>
+
+<label>💰 2. TA MISE (MGA)</label>
+<input type="number" id="miseInput" value="5000" inputmode="numeric" onchange="changerMise()">
 </div>
 
 <div class="journal">
@@ -73,44 +85,110 @@ input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #444;ba
 <button class="btn-effacer" onclick="effacerJournal()">🗑️ Effacer</button>
 <p class="small" id="listeTrades" style="margin-top:10px;text-align:left">Aucun pari.</p>
 </div>
-<p class="small">V11 = Plus de capture. Tu lis les cotes sur Bet261, tu les tapes ici, BAM. 5 secondes.<br>18+ Joue responsable. Virtuel = Hasard.</p>
+<p class="small">V12 = Capture seulement. Le serveur OCR lit le blanc sur vert à ta place.<br>ASTUCE : Coupe juste les lignes vertes, sans la barre d'adresse.<br>18+ Joue responsable. Virtuel = Hasard.</p>
 
 <script>
-let equipes=["Liverpool","London Reds","London Blues","Man Blue","Man Red","Spurs","Wolverhampton","Everton","West Ham","A. Villa","Leeds","Bournemouth","Burnley","Sunderland","Brighton","C. Palace","Fulham","Newcastle","N. Forest","Brentford","Chelsea","Arsenal"];
-let dernierTicketText="", miseDefaut=5000, dernierTableau=null;
-let trades=JSON.parse(localStorage.getItem('virtuel_v11_trades')||"[]");
+let derniereImageData=null, dernierTicketText="", miseDefaut=5000, dernierTableau=null;
+let trades=JSON.parse(localStorage.getItem('virtuel_v12_trades')||"[]");
+function changerMise(){ let v=parseInt(document.getElementById('miseInput').value); if(v&&v>0){ miseDefaut=v; if(dernierTableau) genererTicketBamm(dernierTableau); } }
 function majJournal(){let t=trades.length;let w=trades.filter(x=>x.res==="WIN").length;let wr=t?Math.round(w/t*100):0;document.getElementById('totalTrades').innerText=t;document.getElementById('winRate').innerText=wr+"%";document.getElementById('listeTrades').innerHTML=t?trades.slice(-5).reverse().map(x=>`${x.pari} - ${x.res}`).join("<br>"):"Aucun pari.";}
 majJournal();
-function validerResultat(){if(!dernierTicketText){alert("Calcule d'abord ton ticket !");return;}let res=document.getElementById('resultat').value;trades.push({pari:dernierTicketText,res:res});localStorage.setItem('virtuel_v11_trades',JSON.stringify(trades));majJournal();alert("Validé : "+res);}
-function effacerJournal(){if(confirm("Effacer ?")){trades=[];localStorage.removeItem('virtuel_v11_trades');majJournal();}}
-function copierTicket(){if(!dernierTicketText){alert("Calcule d'abord !");return;}navigator.clipboard.writeText(dernierTicketText).then(()=>alert("Copié !\n"+dernierTicketText));}
-
-// On crée 5 matchs vides, tu remplis juste ceux que tu vois sur Bet261
-let htmlMatchs="";
-for(let i=1;i<=5;i++){
-  let opts=equipes.map(e=>`<option value="${e}">${e}</option>`).join("");
-  htmlMatchs+=`<div class="match-box"><b>MATCH ${i}</b><div class="row2"><select id="dom${i}"><option value="">Domicile...</option>${opts}</select><select id="ext${i}"><option value="">Extérieur...</option>${opts}</select></div><div class="row3"><input id="c1_${i}" placeholder="Cote 1" inputmode="decimal"><input id="cx_${i}" placeholder="Cote X" inputmode="decimal"><input id="c2_${i}" placeholder="Cote 2" inputmode="decimal"></div></div>`;
+function validerResultat(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}let res=document.getElementById('resultat').value;trades.push({pari:dernierTicketText,res:res});localStorage.setItem('virtuel_v12_trades',JSON.stringify(trades));majJournal();alert("Validé : "+res);}
+function effacerJournal(){if(confirm("Effacer ?")){trades=[];localStorage.removeItem('virtuel_v12_trades');majJournal();}}
+function copierTicket(){if(!dernierTicketText){alert("Envoie d'abord ta capture !");return;}navigator.clipboard.writeText(dernierTicketText).then(()=>alert("Copié !\n"+dernierTicketText));}
+function ouvrirManuel(){ document.getElementById('manuelBox').style.display='block'; }
+function genererDepuisLigne(){
+  let txt=document.getElementById('ligneCotes').value||"";
+  // On coupe par / pour chaque match : "1.38 4.54 8.60 / 1.73 4.37 3.94"
+  let parties=txt.split(/[\/|\n]/);
+  let tab=[];
+  parties.forEach((p,idx)=>{
+    let nums=(p.match(/\d[.,]\d{1,2}/g)||[]).map(n=>parseFloat(n.replace(',','.')));
+    if(nums.length>=3) tab.push({nom:"Match "+(idx+1),c1:nums[0],cX:nums[1],c2:nums[2]});
+  });
+  if(!tab.length){ alert("Colle comme ça : 1.38 4.54 8.60 / 1.73 4.37 3.94"); return; }
+  genererTicketBamm(tab);
 }
-document.getElementById('matchs').innerHTML=htmlMatchs;
+function onFileChange(e){
+  let f=e.target.files[0]; if(!f) return;
+  document.getElementById('btnReanalyse').style.display='block';
+  document.getElementById('autoBox').style.display='block';
+  document.getElementById('barBox').style.display='block';
+  document.getElementById('ticketBox').style.display='none';
+  document.getElementById('btnCopy').style.display='none';
+  document.getElementById('linkManuel').style.display='none';
+  document.getElementById('autoText').innerText='⚡ BAM... J\'envoie ta capture au serveur OCR qui lit le vert...';
+  document.getElementById('barFill').style.width='30%';
+  let r=new FileReader();
+  r.onload=function(ev){ derniereImageData=ev.target.result; let p=document.getElementById('preview'); p.src=ev.target.result; p.style.display='block'; lireEtBamm(ev.target.result); };
+  r.readAsDataURL(f);
+}
+function relireCapture(){ if(!derniereImageData){alert("Mets d'abord ta capture !");return;} lireEtBamm(derniereImageData); }
 
-function genererBAM(){
-  miseDefaut=parseInt(document.getElementById('miseInput').value)||5000;
-  let tableau=[];
-  for(let i=1;i<=5;i++){
-    let dom=document.getElementById('dom'+i).value;
-    let ext=document.getElementById('ext'+i).value;
-    let c1=parseFloat((document.getElementById('c1_'+i).value||"").replace(',','.'));
-    let cx=parseFloat((document.getElementById('cx_'+i).value||"").replace(',','.'));
-    let c2=parseFloat((document.getElementById('c2_'+i).value||"").replace(',','.'));
-    if(c1 && cx && c2){
-      let nom=(dom&&ext)? dom+" vs "+ext : "Match "+i;
-      tableau.push({nom:nom,c1:c1,cX:cx,c2:c2});
+// V12 : On agrandit + on envoie au vrai serveur OCR, pas Tesseract local
+function agrandirImage(imgData){
+  return new Promise((resolve)=>{
+    let img=new Image();
+    img.onload=function(){
+      let canvas=document.createElement('canvas');
+      let scale=2;
+      canvas.width=img.width*scale; canvas.height=img.height*scale;
+      let ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      resolve(canvas.toDataURL('image/jpeg',0.9));
+    };
+    img.src=imgData;
+  });
+}
+function trouverEquipes(t){
+  let eq=[["liverpool","Liverpool"],["london reds","London Reds"],["london blues","London Blues"],["london","London"],["man blue","Man Blue"],["manchester blue","Manchester Blue"],["man red","Man Red"],["manchester red","Manchester Red"],["spurs","Spurs"],["tottenham","Spurs"],["wolverhampton","Wolverhampton"],["wolves","Wolverhampton"],["everton","Everton"],["west ham","West Ham"],["a. villa","A. Villa"],["aston villa","A. Villa"],["villa","A. Villa"],["leeds","Leeds"],["bournemouth","Bournemouth"],["burnley","Burnley"],["sunderland","Sunderland"],["brighton","Brighton"],["c. palace","C. Palace"],["crystal palace","C. Palace"],["palace","C. Palace"],["fulham","Fulham"],["newcastle","Newcastle"],["n. forest","N. Forest"],["nottingham","N. Forest"],["forest","N. Forest"],["brentford","Brentford"],["chelsea","Chelsea"],["arsenal","Arsenal"]];
+  let bas=t.toLowerCase(); let trouves=[];
+  eq.forEach(p=>{ let cle=p[0], nom=p[1]; let idx=bas.indexOf(cle); while(idx!==-1){ let deja=trouves.some(x=>Math.abs(x.pos-idx)<5 && x.nom===nom); if(!deja) trouves.push({nom:nom,pos:idx}); idx=bas.indexOf(cle, idx+1); if(trouves.filter(x=>x.nom===nom).length>=3) break; } });
+  trouves.sort((a,b)=>a.pos-b.pos); let fil=[]; trouves.forEach(x=>{ if(!fil.some(f=>Math.abs(f.pos-x.pos)<8)) fil.push(x); });
+  let matchs=[]; for(let i=0;i<fil.length;i+=2){ if(fil[i] && fil[i+1] && fil[i].nom!==fil[i+1].nom) matchs.push(fil[i].nom+" vs "+fil[i+1].nom); }
+  return {matchs:matchs};
+}
+async function lireEtBamm(imgData){
+  try{
+    document.getElementById('barFill').style.width='60%';
+    let grand=await agrandirImage(imgData);
+    // API OCR gratuite - elle lit le blanc sur vert beaucoup mieux que Tesseract local
+    let form=new FormData();
+    form.append("base64Image", grand);
+    form.append("language","eng");
+    form.append("isOverlayRequired","false");
+    form.append("scale","true");
+    form.append("OCREngine","2");
+    let resp=await fetch("https://api.ocr.space/parse/image",{method:"POST",headers:{"apikey":"helloworld"},body:form});
+    let data=await resp.json();
+    let texte="";
+    if(data && data.ParsedResults && data.ParsedResults[0]) texte=data.ParsedResults[0].ParsedText||"";
+    document.getElementById('barFill').style.width='85%';
+    document.getElementById('texteLu').style.display='block';
+    document.getElementById('texteLu').innerText="Texte lu par le serveur : "+texte.substring(0,300);
+    let resNoms=trouverEquipes(texte);
+    let nombres=texte.match(/\d[.,]\d{2}/g)||[];
+    let cotes=nombres.map(n=>parseFloat(n.replace(',','.'))).filter(v=>v>=1.01 && v<=20);
+    // On enlève les doublons et les heures comme 12:49
+    let cotesPropres=[]; cotes.forEach(v=>{ if(!cotesPropres.length || Math.abs(v-cotesPropres[cotesPropres.length-1])>0.01) cotesPropres.push(v); });
+    if(cotesPropres.length>=6){
+      let tableau=[];
+      for(let i=0;i<Math.floor(cotesPropres.length/3);i++){ let nom=resNoms.matchs[i]||("Match "+(i+1)); tableau.push({nom:nom,c1:cotesPropres[i*3],cX:cotesPropres[i*3+1],c2:cotesPropres[i*3+2]}); }
+      document.getElementById('barFill').style.width='100%';
+      document.getElementById('autoText').innerText=`✅ BAM ! ${tableau.length} matchs lus par le serveur.`;
+      setTimeout(()=>{ document.getElementById('barBox').style.display='none'; },500);
+      genererTicketBamm(tableau);
+    } else {
+      document.getElementById('autoText').innerText=`⚠️ Serveur a lu ${cotesPropres.length} cotes. Reprends ta capture en coupant juste les lignes vertes, sans l'heure 12:49 en haut. Ou clique en bas pour coller 1 ligne.`;
+      document.getElementById('linkManuel').style.display='block';
+      document.getElementById('barBox').style.display='none';
     }
+  }catch(e){
+    document.getElementById('autoText').innerText='⚠️ Pas de connexion au serveur OCR. Vérifie ta 4G et réessaie. Ou clique en bas pour coller 1 ligne.';
+    document.getElementById('linkManuel').style.display='block';
+    document.getElementById('barBox').style.display='none';
   }
-  if(!tableau.length){ alert("Tape au moins 1 match : les 3 cotes. Ex: 1.38, 4.54, 8.60"); return; }
-  genererTicketBamm(tableau);
 }
-
 function genererTicketBamm(tableau){
   dernierTableau=tableau;
   let analyses=[];
@@ -136,16 +214,16 @@ function genererTicketBamm(tableau){
   let coteTotale=1; top3.forEach(a=>coteTotale*=a.coteChoix); coteTotale=Math.round(coteTotale*100)/100;
   let gain=Math.round(miseDefaut*coteTotale);
   let chanceCombinee=1; top3.forEach(a=>chanceCombinee*=(a.probaChoix/100)); chanceCombinee=Math.round(chanceCombinee*100);
-  let confTicket=top3.length?Math.round(top3.reduce((s,a)=>s+a.confiance,0)/top3.length):0;
   document.getElementById('ticketBox').style.display='block';
   document.getElementById('btnCopy').style.display='block';
-  document.getElementById('ticketList').innerHTML=top3.map((a,i)=>`<div class="ticket-row"><b>${i+1}. ${a.nom}</b><br><span style="color:#aaa;font-size:11px">Proba 1:${a.p1}% X:${a.pX}% 2:${a.p2}% - ${a.c1} / ${a.cX} / ${a.c2}</span><br><span>${a.choix} @ ${a.coteChoix}</span><br><span class="risque">⚠️ ${a.avertissement}</span></div>`).join("") + (pieges.length?`<div class="ticket-row" style="border:1px solid #ff1744"><b>🚫 PIÈGES À NE PAS JOUER SEUL :</b><br>${pieges.map(p=>`${p.nom} @ ${p.coteFav} - Risque ${p.risque}%`).join("<br>")}</div>`:"");
+  document.getElementById('ticketList').innerHTML=top3.map((a,i)=>`<div class="ticket-row"><b>${i+1}. ${a.nom}</b><br><span style="color:#aaa;font-size:11px">Proba 1:${a.p1}% X:${a.pX}% 2:${a.p2}% - ${a.c1} / ${a.cX} / ${a.c2}</span><br><span>${a.choix} @ ${a.coteChoix}</span><br><span class="risque">⚠️ ${a.avertissement}</span></div>`).join("") + (pieges.length?`<div class="ticket-row" style="border:1px solid #ff1744"><b>🚫 PIÈGES :</b><br>${pieges.map(p=>`${p.nom} @ ${p.coteFav}`).join("<br>")}</div>`:"");
   document.getElementById('coteTotale').innerText="x "+coteTotale;
-  document.getElementById('gainPotentiel').innerText=`Mise ${miseDefaut} MGA → Gain ${gain} MGA (Bénéfice ${gain-miseDefaut} MGA)`;
+  document.getElementById('gainPotentiel').innerText=`Mise ${miseDefaut} MGA → Gain ${gain} MGA`;
   document.getElementById('chanceCombinee').innerText=`🎯 Chance de gagner les 3 : ${chanceCombinee}%`;
   document.getElementById('ticketDetail').innerHTML=`<b>📊 Confiance = vraie proba.</b><br>${top3.map(a=>`• ${a.nom} : ${a.confiance}% - Risque ${a.risque}%`).join("<br>")}`;
-  document.getElementById('tousMatchs').innerHTML=`<b>✅ Tous les matchs que tu as tapés :</b><br>${analyses.map(a=>`${a.type==="PIEGE"?"🚫":a.confiance>=55?"🟢":"🟡"} ${a.nom} - ${a.choix}`).join("<br>")}`;
-  dernierTicketText=`TICKET V11 BAM - Cote x${coteTotale} - Gain ${gain} MGA - Chance ${chanceCombinee}%\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix}`).join("\n")}`;
+  document.getElementById('nomsLus').innerHTML=`<b>✅ Tous les matchs :</b><br>${analyses.map(a=>`${a.type==="PIEGE"?"🚫":a.confiance>=55?"🟢":"🟡"} ${a.nom} - ${a.choix}`).join("<br>")}`;
+  document.getElementById('autoText').innerHTML=`✅ <b>BAM ! Ticket prêt.</b> Cote x${coteTotale} - Chance ${chanceCombinee}%`;
+  dernierTicketText=`TICKET V12 CAPTURE BAM - Cote x${coteTotale} - Gain ${gain} MGA - Chance ${chanceCombinee}%\n${top3.map((a,i)=>`${i+1}. ${a.nom} - ${a.choix} @ ${a.coteChoix}`).join("\n")}`;
   if(navigator.vibrate) navigator.vibrate([100,50,100]);
   document.getElementById('ticketBox').scrollIntoView({behavior:'smooth',block:'start'});
 }
